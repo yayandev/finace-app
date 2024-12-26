@@ -33,4 +33,45 @@ class SummaryController extends Controller
         // Kirim data ke view
         return view('reports.summary', compact('start_date', 'end_date', 'income', 'expense', 'balance'));
     }
+
+    public function getSummary()
+{
+    $today = now()->startOfDay();
+    $month = now()->startOfMonth();
+    $year = now()->startOfYear();
+
+    $incomeToday = Transaction::where('type', 'masuk')
+        ->whereDate('transaction_date', $today)
+        ->sum('amount');
+
+    $expenseToday = Transaction::where('type', 'keluar')
+        ->whereDate('transaction_date', $today)
+        ->sum('amount');
+
+    $incomeMonth = Transaction::where('type', 'masuk')
+        ->whereBetween('transaction_date', [$month, now()])
+        ->sum('amount');
+
+    $expenseMonth = Transaction::where('type', 'keluar')
+        ->whereBetween('transaction_date', [$month, now()])
+        ->sum('amount');
+
+    $incomeYear = Transaction::where('type', 'masuk')
+        ->whereBetween('transaction_date', [$year, now()])
+        ->sum('amount');
+
+    $expenseYear = Transaction::where('type', 'keluar')
+        ->whereBetween('transaction_date', [$year, now()])
+        ->sum('amount');
+
+    return response()->json([
+        'income_today' => $incomeToday,
+        'expense_today' => $expenseToday,
+        'income_month' => $incomeMonth,
+        'expense_month' => $expenseMonth,
+        'income_year' => $incomeYear,
+        'expense_year' => $expenseYear,
+    ]);
+}
+
 }

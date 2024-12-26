@@ -7,8 +7,8 @@
         <div class="d-flex justify-content-between mb-3">
             <h5 class="m-0">Daftar Transaksi</h5>
             {{-- button modal add --}}
-            <a href="{{ route('transactions.create') }}" class="btn btn-primary">
-                <i class="mdi mdi-plus"></i> Tambah Transaksi
+            <a href="{{ route('transactions.index') }}" class="btn btn-secondary">
+                <i class="mdi mdi-arrow-left    "></i> Kembali
             </a>
         </div>
 

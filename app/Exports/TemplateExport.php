@@ -16,7 +16,7 @@ class TemplateExport implements FromArray
         return [
             ['Type', 'Category ID', 'Amount', 'Transaction Date', 'User ID', 'Description'],
             // Baris kedua ini adalah template kosong
-            ['', '', '', '', '', '']
+            ['', '', '', 'Y-m-d', '', '']
         ];
     }
 }

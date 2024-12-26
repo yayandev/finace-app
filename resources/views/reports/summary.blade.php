@@ -48,5 +48,93 @@
             </div>
         </div>
     </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h5>Ringkasan Pemasukan & Pengeluaran</h5>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Periode</th>
+                        <th>Pemasukan</th>
+                        <th>Pengeluaran</th>
+                    </tr>
+                </thead>
+                <tbody id="summary_table">
+                    <tr>
+                        <td>Hari Ini</td>
+                        <td id="income_today"></td>
+                        <td id="expense_today"></td>
+                    </tr>
+                    <tr>
+                        <td>Bulan Ini</td>
+                        <td id="income_month"></td>
+                        <td id="expense_month"></td>
+                    </tr>
+                    <tr>
+                        <td>Tahun Ini</td>
+                        <td id="income_year"></td>
+                        <td id="expense_year"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 </div>
 @endsection
+
+@push('scripts')
+    <script>function loadSummary() {
+        $.ajax({
+            url: '{{ route("transactions.summary") }}',
+            method: 'GET',
+            success: function (data) {
+                $('#income_today').text(new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    maximumFractionDigits: 0
+                }).format(data.income_today));
+
+                $('#expense_today').text(new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    maximumFractionDigits: 0
+                }).format(data.expense_today));
+
+                $('#income_month').text(new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    maximumFractionDigits: 0
+                }).format(data.income_month));
+
+                $('#expense_month').text(new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    maximumFractionDigits: 0
+                }).format(data.expense_month));
+
+                $('#income_year').text(new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    maximumFractionDigits: 0
+                }).format(data.income_year));
+
+                $('#expense_year').text(new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    maximumFractionDigits: 0
+                }).format(data.expense_year));
+            },
+            error: function (xhr) {
+                console.error('Error loading summary:', xhr.responseText);
+            }
+        });
+    }
+
+    // Panggil fungsi loadSummary saat dokumen siap
+    $(document).ready(function () {
+        loadSummary();
+    });
+    </script>
+@endpush

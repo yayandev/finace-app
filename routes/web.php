@@ -10,17 +10,22 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\TransactionsExport;
 use App\Http\Controllers\SummaryController;
 use App\Models\Transaction;
+use Illuminate\Support\Facades\DB;
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('/finance/data', [TransactionController::class, 'getFinanceData'])->name('finance.data');
+
     Route::get('/reports/summary', [SummaryController::class, 'index'])->name('reports.summary');
+    Route::get('/transactions/summary', [SummaryController::class, 'getSummary'])->name('transactions.summary');
+
     Route::resource('categories', CategoryController::class);
     Route::resource('transactions', TransactionController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
     Route::get('/dashboard', function () {
         $start_date = now()->startOfMonth();
         $end_date = now()->endOfMonth();
 
-        // Filter transaksi berdasarkan bulan ini
-        $transactions = Transaction::whereBetween('transaction_date', [$start_date, $end_date])->get();
+        // total keseluruhan transaksi
+        $transactions = Transaction::all();
 
         // Hitung total pemasukan dan pengeluaran
         $income = $transactions->where('type', 'masuk')->sum('amount');
@@ -30,8 +35,36 @@ Route::middleware(['auth'])->group(function () {
         // Ambil transaksi terakhir
         $latest_transactions = Transaction::latest()->take(5)->get();
 
+        $totalUangMasukTahunIni = Transaction::where('type', 'masuk')->whereYear('transaction_date', now()->year)->sum('amount');
+        $totalUangKeluarTahunIni = Transaction::where('type', 'keluar')->whereYear('transaction_date', now()->year)->sum('amount');
+
+        $totalUangMasukHariIni = Transaction::where('type', 'masuk')->whereDate('transaction_date', now())->sum('amount');
+        $totalUangKeluarHariIni = Transaction::where('type', 'keluar')->whereDate('transaction_date', now())->sum('amount');
+
+        $totalUangMasukBulanIni = Transaction::where('type', 'masuk')->whereBetween('transaction_date', [$start_date, $end_date])->sum('amount');
+        $totalUangKeluarBulanIni = Transaction::where('type', 'keluar')->whereBetween('transaction_date', [$start_date, $end_date])->sum('amount');
+
+        $months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+        $dataPemasukanTahunIniPerbulan = [];
+        $dataPengeluaranTahunIniPerbulan = [];
+
+        foreach (range(1, 12) as $month) {
+            $dataPemasukanTahunIniPerbulan[] = DB::table('transactions')
+                ->whereMonth('transaction_date', $month)
+                ->whereYear('transaction_date', date('Y'))
+                ->where('type', 'masuk') // tipe pemasukan
+                ->sum('amount');
+
+            $dataPengeluaranTahunIniPerbulan[] = DB::table('transactions')
+                ->whereMonth('transaction_date', $month)
+                ->whereYear('transaction_date', date('Y'))
+                ->where('type', 'keluar') // tipe pengeluaran
+                ->sum('amount');
+        }
+
         // Kirim data ke view
-        return view('welcome', compact('income', 'expense', 'balance', 'latest_transactions'));
+        return view('welcome', compact('income', 'expense', 'balance', 'latest_transactions', 'totalUangMasukTahunIni', 'totalUangKeluarTahunIni', 'totalUangMasukHariIni', 'totalUangKeluarHariIni', 'totalUangMasukBulanIni', 'totalUangKeluarBulanIni', 'months', 'dataPemasukanTahunIniPerbulan', 'dataPengeluaranTahunIniPerbulan'));
     })->name('home');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

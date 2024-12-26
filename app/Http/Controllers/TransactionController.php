@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class TransactionController extends Controller
@@ -130,5 +131,34 @@ class TransactionController extends Controller
         return view('transactions.expense_report', compact('total'));
     }
 
+    public function getFinanceData(Request $request)
+    {
+        $year = $request->input('year', date('Y'));
+        $months = range(1, 12);
+
+        $dataPemasukanTahunIniPerbulan = [];
+        $dataPengeluaranTahunIniPerbulan = [];
+
+        foreach ($months as $month) {
+            $dataPemasukanTahunIniPerbulan[] = DB::table('transactions')
+                ->whereMonth('transaction_date', $month)
+                ->whereYear('transaction_date', $year)
+                ->where('type', 'masuk')
+                ->sum('amount');
+
+            $dataPengeluaranTahunIniPerbulan[] = DB::table('transactions')
+                ->whereMonth('transaction_date', $month)
+                ->whereYear('transaction_date', $year)
+                ->where('type', 'keluar')
+                ->sum('amount');
+        }
+
+        return response()->json([
+            'dataPemasukanTahunIniPerbulan' => $dataPemasukanTahunIniPerbulan,
+            'dataPengeluaranTahunIniPerbulan' => $dataPengeluaranTahunIniPerbulan,
+            'totalPemasukan' => array_sum($dataPemasukanTahunIniPerbulan),
+            'totalPengeluaran' => array_sum($dataPengeluaranTahunIniPerbulan),
+        ]);
+    }
 
 }
