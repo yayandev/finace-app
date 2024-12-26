@@ -41,9 +41,8 @@ Route::middleware(['auth'])->group(function () {
         $totalUangMasukTahunIni = Transaction::where('type', 'masuk')->whereYear('transaction_date', now()->year)->sum('amount');
         $totalUangKeluarTahunIni = Transaction::where('type', 'keluar')->whereYear('transaction_date', now()->year)->sum('amount');
 
-        $today = now()->format('Y-m-d');
-        $totalUangMasukHariIni = Transaction::where('type', 'masuk')->whereDate('transaction_date', $today)->sum('amount');
-        $totalUangKeluarHariIni = Transaction::where('type', 'keluar')->whereDate('transaction_date', $today)->sum('amount');
+        $totalUangMasukHariIni = Transaction::where('type', 'masuk')->whereDate('created_at', now())->sum('amount');
+        $totalUangKeluarHariIni = Transaction::where('type', 'keluar')->whereDate('created_at', now())->sum('amount');
 
         $totalUangMasukBulanIni = Transaction::where('type', 'masuk')->whereBetween('transaction_date', [$start_date, $end_date])->sum('amount');
         $totalUangKeluarBulanIni = Transaction::where('type', 'keluar')->whereBetween('transaction_date', [$start_date, $end_date])->sum('amount');
