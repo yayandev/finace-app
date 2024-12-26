@@ -3,13 +3,13 @@
 @section('title', 'Categories')
 
 @push('css')
-<link rel="stylesheet" href="./assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
-<link rel="stylesheet" href="./assets/vendor/libs/typeahead-js/typeahead.css" />
-<link rel="stylesheet" href="./assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css" />
-<link rel="stylesheet" href="./assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css"/>
-<link rel="stylesheet" href="./assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css" />
-<link rel="stylesheet" href="./assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css" />
-<link rel="stylesheet" href="./assets/vendor/libs/flatpickr/flatpickr.css" />
+<link rel="stylesheet" href="/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+<link rel="stylesheet" href="/assets/vendor/libs/typeahead-js/typeahead.css" />
+<link rel="stylesheet" href="/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css" />
+<link rel="stylesheet" href="/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css"/>
+<link rel="stylesheet" href="/assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css" />
+<link rel="stylesheet" href="/assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css" />
+<link rel="stylesheet" href="/assets/vendor/libs/flatpickr/flatpickr.css" />
 @endpush
 
 @section('content')
@@ -108,7 +108,7 @@
 @endsection
 
 @push('scripts')
-<script src="./assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
+<script src="/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
 <script>
  $(document).ready(function () {
     $('#tbl_list').DataTable({

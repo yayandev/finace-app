@@ -5,9 +5,19 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
-class CategoryController extends Controller
+class CategoryController extends Controller implements HasMiddleware
 {
+
+    public static function middleware(): array
+    {
+        return [
+            // examples with aliases, pipe-separated names, guards, etc:
+            'role_or_permission:admin|view-categories|edit-categories|delete-categories|create-categories',
+        ];
+    }
+
     public function index()
     {
         if (request()->ajax()) {

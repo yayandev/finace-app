@@ -30,26 +30,32 @@
           <div>Transaksi</div>
         </a>
         <ul class="menu-sub">
-          <li class="menu-item {{ Request::is('transactions/create') ? 'active' : '' }}">
+         @can('create-transactions')
+         <li class="menu-item {{ Request::is('transactions/create') ? 'active' : '' }}">
             <a href="/transactions/create" class="menu-link">
               <div>Input Transaksi</div>
             </a>
           </li>
-          <li class="menu-item {{ Request::is('transactions') ? 'active' : '' }}">
+         @endcan
+         @can('view-transactions')
+         <li class="menu-item {{ Request::is('transactions') ? 'active' : '' }}">
             <a href="/transactions" class="menu-link">
               <div>Lihat Transaksi</div>
             </a>
           </li>
+         @endcan
         </ul>
       </li>
 
       <!-- Kategori -->
-      <li class="menu-item {{ Request::is('categories*') ? 'active' : '' }}">
+     @can('view-categories')
+     <li class="menu-item {{ Request::is('categories*') ? 'active' : '' }}">
         <a href="/categories" class="menu-link">
           <i class="menu-icon tf-icons mdi mdi-folder-outline"></i>
           <div>Kategori</div>
         </a>
       </li>
+     @endcan
 
       <!-- Laporan -->
       <li class="menu-item {{ Request::is('reports*') ? 'active open' : '' }}">
@@ -58,24 +64,58 @@
           <div>Laporan</div>
         </a>
         <ul class="menu-sub">
-          <li class="menu-item {{ Request::is('reports/income') ? 'active' : '' }}">
+         @can('view-income-report')
+         <li class="menu-item {{ Request::is('reports/income') ? 'active' : '' }}">
             <a href="/reports/income" class="menu-link">
               <div>Laporan Pemasukan</div>
             </a>
           </li>
-          <li class="menu-item {{ Request::is('reports/expense') ? 'active' : '' }}">
+         @endcan
+         @can('view-expense-report')
+         <li class="menu-item {{ Request::is('reports/expense') ? 'active' : '' }}">
             <a href="/reports/expense" class="menu-link">
               <div>Laporan Pengeluaran</div>
             </a>
           </li>
-          <li class="menu-item {{ Request::is('reports/summary') ? 'active' : '' }}">
+         @endcan
+        @can('view-summary')
+        <li class="menu-item {{ Request::is('reports/summary') ? 'active' : '' }}">
             <a href="/reports/summary" class="menu-link">
               <div>Ringkasan</div>
             </a>
           </li>
+        @endcan
         </ul>
       </li>
+    @can('view-users')
+        {{-- users --}}
+      <li class="menu-item {{ Request::is('users*') ? 'active' : '' }}">
+        <a href="/users" class="menu-link">
+            <i class="menu-icon tf-icons mdi mdi-account-multiple-outline"></i>
+          <div>Users</div>
+        </a>
+      </li>
+    @endcan
 
+      {{-- Roles --}}
+      @can('view-roles')
+      <li class="menu-item {{ Request::is('roles*') ? 'active' : '' }}">
+          <a href="/roles" class="menu-link">
+              <i class="menu-icon tf-icons mdi mdi-account-key-outline"></i>
+          <div>Roles</div>
+      </a>
+      </li>
+      @endcan
+
+        @can('view-permissions')
+            {{-- Permission --}}
+        <li class="menu-item {{ Request::is('permissions*') ? 'active' : '' }}">
+            <a href="/permissions" class="menu-link">
+                <i class="menu-icon tf-icons mdi mdi-account-key-outline"></i>
+            <div>Permissions</div>
+        </a>
+        </li>
+        @endcan
       <!-- Pengaturan -->
       <li class="menu-item {{ Request::is('settings*') ? 'active' : '' }}">
         <a href="/settings" class="menu-link">

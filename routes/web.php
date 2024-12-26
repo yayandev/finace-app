@@ -8,7 +8,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\TransactionsExport;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\RolesController;
 use App\Http\Controllers\SummaryController;
+use App\Http\Controllers\UserController;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\DB;
 
@@ -69,8 +72,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::get('/reports/income',[TransactionController::class, 'incomeReport'])->name('reports.income');
-    Route::get('/reports/expense',[TransactionController::class, 'expenseReport'])->name('reports.expense');
+    Route::get('/reports/income', [TransactionController::class, 'incomeReport'])->name('reports.income');
+    Route::get('/reports/expense', [TransactionController::class, 'expenseReport'])->name('reports.expense');
 
     Route::get('/transactions/export', function (Request $request) {
         $start_date = $request->input('date_start');
@@ -82,6 +85,10 @@ Route::middleware(['auth'])->group(function () {
     })->name('transactions.export');
     Route::post('/transactions/import', [TransactionExportImportController::class, 'import'])->name('transactions.import');
     Route::get('/download-template', [TransactionExportImportController::class, 'downloadTemplate'])->name('transactions.downloadTemplate');
+
+    Route::resource('roles', RolesController::class);
+    Route::resource('permissions', PermissionController::class);
+    Route::resource('users', UserController::class);
 });
 
 Route::middleware(['guest'])->group(function () {

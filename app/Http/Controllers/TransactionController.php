@@ -4,11 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
-class TransactionController extends Controller
+class TransactionController extends Controller implements HasMiddleware
 {
+
+    public static function middleware(): array
+    {
+        return [
+            'role_or_permission:admin|view-transactions|edit-transactions|delete-transactions|create-transactions',
+        ];
+    }
+
     public function index()
     {
         if (request()->ajax()) {
@@ -160,5 +169,4 @@ class TransactionController extends Controller
             'totalPengeluaran' => array_sum($dataPengeluaranTahunIniPerbulan),
         ]);
     }
-
 }
