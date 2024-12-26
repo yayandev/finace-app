@@ -57,36 +57,38 @@
       </li>
      @endcan
 
-      <!-- Laporan -->
-      <li class="menu-item {{ Request::is('reports*') ? 'active open' : '' }}">
-        <a href="javascript:void(0);" class="menu-link menu-toggle">
-          <i class="menu-icon tf-icons mdi mdi-file-document-outline"></i>
-          <div>Laporan</div>
-        </a>
-        <ul class="menu-sub">
-         @can('view-income-report')
-         <li class="menu-item {{ Request::is('reports/income') ? 'active' : '' }}">
-            <a href="/reports/income" class="menu-link">
-              <div>Laporan Pemasukan</div>
-            </a>
-          </li>
-         @endcan
-         @can('view-expense-report')
-         <li class="menu-item {{ Request::is('reports/expense') ? 'active' : '' }}">
-            <a href="/reports/expense" class="menu-link">
-              <div>Laporan Pengeluaran</div>
-            </a>
-          </li>
-         @endcan
-        @can('view-summary')
-        <li class="menu-item {{ Request::is('reports/summary') ? 'active' : '' }}">
-            <a href="/reports/summary" class="menu-link">
-              <div>Ringkasan</div>
-            </a>
-          </li>
+     @if (auth()->user()->can('view-income-report') || auth()->user()->can('view-expense-report') || auth()->user()->can('view-summary'))
+     <!-- Laporan -->
+     <li class="menu-item {{ Request::is('reports*') ? 'active open' : '' }}">
+       <a href="javascript:void(0);" class="menu-link menu-toggle">
+         <i class="menu-icon tf-icons mdi mdi-file-document-outline"></i>
+         <div>Laporan</div>
+       </a>
+       <ul class="menu-sub">
+        @can('view-income-report')
+        <li class="menu-item {{ Request::is('reports/income') ? 'active' : '' }}">
+           <a href="/reports/income" class="menu-link">
+             <div>Laporan Pemasukan</div>
+           </a>
+         </li>
         @endcan
-        </ul>
-      </li>
+        @can('view-expense-report')
+        <li class="menu-item {{ Request::is('reports/expense') ? 'active' : '' }}">
+           <a href="/reports/expense" class="menu-link">
+             <div>Laporan Pengeluaran</div>
+           </a>
+         </li>
+        @endcan
+       @can('view-summary')
+       <li class="menu-item {{ Request::is('reports/summary') ? 'active' : '' }}">
+           <a href="/reports/summary" class="menu-link">
+             <div>Ringkasan</div>
+           </a>
+         </li>
+       @endcan
+       </ul>
+     </li>
+     @endif
     @can('view-users')
         {{-- users --}}
       <li class="menu-item {{ Request::is('users*') ? 'active' : '' }}">
