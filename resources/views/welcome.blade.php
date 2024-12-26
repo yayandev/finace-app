@@ -173,7 +173,7 @@
                         <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
                             <div class="avatar">
                                 <div class="avatar-initial bg-label-success rounded">
-                                    <i class="mdi mdi-arrow-down-circle mdi-24px"></i>
+                                    <i class="mdi mdi-arrow-up-circle mdi-24px"></i>
                                 </div>
                             </div>
                         </div>
@@ -193,7 +193,7 @@
                         <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
                             <div class="avatar">
                                 <div class="avatar-initial bg-label-success rounded">
-                                    <i class="mdi mdi-arrow-down-circle mdi-24px"></i>
+                                    <i class="mdi mdi-arrow-up-circle mdi-24px"></i>
                                 </div>
                             </div>
                         </div>
@@ -214,7 +214,7 @@
                         <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
                             <div class="avatar">
                                 <div class="avatar-initial bg-label-success rounded">
-                                    <i class="mdi mdi-arrow-down-circle mdi-24px"></i>
+                                    <i class="mdi mdi-arrow-up-circle mdi-24px"></i>
                                 </div>
                             </div>
                         </div>
