@@ -112,7 +112,7 @@
                                     <tr>
                                         <td>{{ $transaction->transaction_date->format('d/m/Y') }}</td>
                                         <td>{{ $transaction->category->name }}</td>
-                                        <td>Rp. {{ number_format($transaction->amount, 0, ',', '.') }}</td>
+                                        <td style="font-size: 14px">Rp. {{ number_format($transaction->amount, 0, ',', '.') }}</td>
                                         <td>
                                             {{-- badge --}}
                                             <span
