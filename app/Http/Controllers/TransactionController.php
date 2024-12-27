@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -46,7 +47,7 @@ class TransactionController extends Controller implements HasMiddleware
 
     public function create()
     {
-        $categories = auth()->user()->categories;
+        $categories = Category::all();
         return view('transactions.create', compact('categories'));
     }
 
@@ -68,7 +69,7 @@ class TransactionController extends Controller implements HasMiddleware
 
     public function edit(Transaction $transaction)
     {
-        $categories = auth()->user()->categories;
+        $categories = Category::all();
         return view('transactions.edit', compact('transaction', 'categories'));
     }
 
