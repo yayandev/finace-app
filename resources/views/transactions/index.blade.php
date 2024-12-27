@@ -201,9 +201,15 @@ $(document).ready(function () {
                         <form action="/transactions/${data}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
-                            <button class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
-                                <i class="mdi mdi-delete"></i>
-                            </button>
+                            @can('delete-transactions')
+                            <form action="/transactions/${data}" method="POST" class="d-inline">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
+                                    <i class="mdi mdi-delete"></i>
+                                </button>
+                            </form>
+                            @endcan
                         </form>
                     `;
                 }
