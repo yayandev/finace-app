@@ -28,7 +28,7 @@
                             <div class="col-md-3 mb-2">
                                 <div class="form-check">
                                     <input type="checkbox" class="form-check-input" name="permissions[]"
-                                        value="{{ $permission->id }}"
+                                        value="{{ $permission->name }}"
                                         id="perm_{{ $permission->id }}"
                                         {{ $role->permissions->contains($permission->id) ? 'checked' : '' }}>
                                     <label class="form-check-label" for="perm_{{ $permission->id }}">

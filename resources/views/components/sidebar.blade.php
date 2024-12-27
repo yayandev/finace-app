@@ -24,6 +24,7 @@
       </li>
 
       <!-- Transaksi -->
+      @if (auth()->user()->can('view-transactions') || auth()->user()->can('create-transactions'))
       <li class="menu-item {{ Request::is('transactions*') ? 'active open' : '' }}">
         <a href="javascript:void(0);" class="menu-link menu-toggle">
           <i class="menu-icon tf-icons mdi mdi-cash-multiple"></i>
@@ -46,6 +47,7 @@
          @endcan
         </ul>
       </li>
+      @endif
 
       <!-- Kategori -->
      @can('view-categories')
