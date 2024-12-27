@@ -110,10 +110,10 @@
                             <tbody>
                                 @foreach ($latest_transactions as $transaction)
                                     <tr>
-                                        <td>{{ $transaction->transaction_date->format('d/m/Y') }}</td>
-                                        <td>{{ $transaction->category->name }}</td>
-                                        <td style="font-size: 14px">Rp. {{ number_format($transaction->amount, 0, ',', '.') }}</td>
-                                        <td>
+                                        <td style="font-size: 12px">{{ $transaction->transaction_date->format('d/m/Y') }}</td>
+                                        <td style="font-size: 12px">{{ $transaction->category->name }}</td>
+                                        <td style="font-size: 12px">Rp. {{ number_format($transaction->amount, 0, ',', '.') }}</td>
+                                        <td style="font-size: 12px">
                                             {{-- badge --}}
                                             <span
                                             @if ($transaction->type == 'masuk')
