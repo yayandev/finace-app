@@ -99,6 +99,10 @@
             </div>
             <div class="modal-body p-4">
                 <div class="mb-3">
+                    <label class="form-label">User</label>
+                    <input type="text" id="user" class="form-control" readonly>
+                </div>
+                <div class="mb-3">
                     <label class="form-label">Type</label>
                     <input type="text" id="type" class="form-control" readonly>
                 </div>
@@ -192,7 +196,7 @@ $(document).ready(function () {
                 searchable: false,
                 render: function (data, type, row) {
                     return `
-                        <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#modal-detail" data-id="${data}" data-type="${row.type}" data-category="${row.category.name}" data-amount="${row.amount}" data-date="${row.transaction_date}" data-description="${row.description}">
+                        <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#modal-detail" data-id="${data}" data-type="${row.type}" data-category="${row.category.name}" data-amount="${row.amount}" data-date="${row.transaction_date}" data-description="${row.description}" data-user="${row.user.name}">
                             <i class="mdi mdi-eye"></i>
                             </button>
                         <a class="btn btn-sm btn-warning" href="/transactions/${data}/edit">
@@ -246,7 +250,7 @@ $(document).ready(function () {
         let dateStart = $('#date_start').val();
         let dateEnd = $('#date_end').val();
         let type = $('#type').val();
-
+        
         // Update the export button URL
         btnExport.attr('href', `${url}?date_start=${dateStart}&date_end=${dateEnd}&type=${type}`);
     });
@@ -257,6 +261,7 @@ $('#modal-detail').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget);
     var modal = $(this);
 
+    modal.find('#user').val(button.data('user'));
     modal.find('#type').val(button.data('type'));
     modal.find('#category').val(button.data('category'));
     modal.find('#amount').val(new Intl.NumberFormat('id-ID', {
