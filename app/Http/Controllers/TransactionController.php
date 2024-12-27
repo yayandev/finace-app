@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Paket;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -22,7 +23,7 @@ class TransactionController extends Controller implements HasMiddleware
     public function index()
     {
         if (request()->ajax()) {
-            $query = Transaction::query()->with('category', 'user');
+            $query = Transaction::query()->with('category', 'user', 'paket');
 
             if (auth()->user()->hasRole('user')) {
                 $query->where('user_id', auth()->id());
@@ -40,19 +41,30 @@ class TransactionController extends Controller implements HasMiddleware
                 $query->where('type', $type);
             }
 
+            if ($category = request('category_id')) {
+                $query->where('category_id', $category);
+            }
+
+            if ($paket = request('paket_id')) {
+                $query->where('paket_id', $paket);
+            }
+
             return DataTables::of($query)
                 ->make();
         }
 
         $total = Transaction::query()->sum('amount');
+        $categories = Category::all();
+        $pakets = Paket::all();
 
-        return view('transactions.index', compact('total'));
+        return view('transactions.index', compact('total', 'categories', 'pakets'));
     }
 
     public function create()
     {
         $categories = Category::all();
-        return view('transactions.create', compact('categories'));
+        $pakets = Paket::all();
+        return view('transactions.create', compact('categories', 'pakets'));
     }
 
     public function store(Request $request)
@@ -62,7 +74,8 @@ class TransactionController extends Controller implements HasMiddleware
             'amount' => 'required|numeric|min:0',
             'type' => 'required|in:masuk,keluar',
             'description' => 'required|string',
-            'transaction_date' => 'required|date'
+            'transaction_date' => 'required|date',
+            'paket_id' => 'required|exists:pakets,id',
         ]);
 
         auth()->user()->transactions()->create($validated);
@@ -74,7 +87,8 @@ class TransactionController extends Controller implements HasMiddleware
     public function edit(Transaction $transaction)
     {
         $categories = Category::all();
-        return view('transactions.edit', compact('transaction', 'categories'));
+        $pakets = Paket::all();
+        return view('transactions.edit', compact('transaction', 'categories', 'pakets'));
     }
 
     public function update(Request $request, Transaction $transaction)
@@ -84,7 +98,8 @@ class TransactionController extends Controller implements HasMiddleware
             'amount' => 'required|numeric|min:0',
             'type' => 'required|in:masuk,keluar',
             'description' => 'required|string',
-            'transaction_date' => 'required|date'
+            'transaction_date' => 'required|date',
+            'paket_id' => 'required|exists:pakets,id',
         ]);
 
         $transaction->update($validated);
@@ -104,7 +119,11 @@ class TransactionController extends Controller implements HasMiddleware
     public function incomeReport()
     {
         if (request()->ajax()) {
-            $query = Transaction::query()->where('type', 'masuk')->with('category', 'user');
+            $query = Transaction::query()->with('category', 'user', 'paket');
+
+            if (auth()->user()->hasRole('user')) {
+                $query->where('user_id', auth()->id());
+            }
 
             // Filter by date range
             if ($start = request('date_start')) {
@@ -112,6 +131,18 @@ class TransactionController extends Controller implements HasMiddleware
             }
             if ($end = request('date_end')) {
                 $query->whereDate('transaction_date', '<=', $end);
+            }
+
+            if ($type = request('type')) {
+                $query->where('type', $type);
+            }
+
+            if ($category = request('category_id')) {
+                $query->where('category_id', $category);
+            }
+
+            if ($paket = request('paket_id')) {
+                $query->where('paket_id', $paket);
             }
 
             return DataTables::of($query)
@@ -119,14 +150,19 @@ class TransactionController extends Controller implements HasMiddleware
         }
 
         $total = Transaction::query()->where('type', 'masuk')->sum('amount');
-
-        return view('transactions.income_report', compact('total'));
+        $categories = Category::all();
+        $pakets = Paket::all();
+        return view('transactions.income_report', compact('total', 'categories', 'pakets'));
     }
 
     public function expenseReport()
     {
         if (request()->ajax()) {
-            $query = Transaction::query()->where('type', 'keluar')->with('category', 'user');
+            $query = Transaction::query()->with('category', 'user', 'paket');
+
+            if (auth()->user()->hasRole('user')) {
+                $query->where('user_id', auth()->id());
+            }
 
             // Filter by date range
             if ($start = request('date_start')) {
@@ -136,13 +172,26 @@ class TransactionController extends Controller implements HasMiddleware
                 $query->whereDate('transaction_date', '<=', $end);
             }
 
+            if ($type = request('type')) {
+                $query->where('type', $type);
+            }
+
+            if ($category = request('category_id')) {
+                $query->where('category_id', $category);
+            }
+
+            if ($paket = request('paket_id')) {
+                $query->where('paket_id', $paket);
+            }
+
             return DataTables::of($query)
                 ->make();
         }
 
         $total = Transaction::query()->where('type', 'keluar')->sum('amount');
-
-        return view('transactions.expense_report', compact('total'));
+        $categories = Category::all();
+        $pakets = Paket::all();
+        return view('transactions.expense_report', compact('total', 'categories', 'pakets'));
     }
 
     public function getFinanceData(Request $request)

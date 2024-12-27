@@ -2,41 +2,38 @@
 
 namespace App\Exports;
 
-use Maatwebsite\Excel\Concerns\FromArray;
+use App\Models\Category;
+use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class TemplateExport implements FromArray, WithHeadings, WithStyles
+class CategoriesExport implements FromCollection, WithHeadings, WithStyles
 {
     /**
-     * Mengembalikan array untuk template yang diinginkan
+     * Mengambil data dari tabel categories
      *
-     * @return array
+     * @return \Illuminate\Support\Collection
      */
-    public function array(): array
+    public function collection()
     {
-        return [
-            // Baris contoh pengisian
-            ['', '', '', '', 'Y-m-d', '', ''],
-        ];
+        return Category::select('id', 'name', 'type', 'user_id', 'created_at', 'updated_at')->get();
     }
 
     /**
-     * Menambahkan heading untuk kolom template
+     * Menambahkan header untuk kolom template
      *
      * @return array
      */
     public function headings(): array
     {
         return [
-            'Type',           // Jenis transaksi, seperti income atau expense
-            'Category ID',    // ID kategori transaksi
-            'Paket ID',       // ID paket terkait transaksi
-            'Amount',         // Nominal transaksi
-            'Transaction Date', // Tanggal transaksi dalam format Y-m-d
-            'User ID',        // ID pengguna
-            'Description',    // Deskripsi tambahan
+            'ID',           // ID kategori
+            'Name',         // Nama kategori
+            'Type',         // Jenis kategori (masuk atau keluar)
+            'User ID',      // ID pengguna yang membuat kategori
+            'Created At',   // Tanggal kategori dibuat
+            'Updated At',   // Tanggal kategori diperbarui
         ];
     }
 
@@ -49,7 +46,7 @@ class TemplateExport implements FromArray, WithHeadings, WithStyles
     public function styles(Worksheet $sheet)
     {
         // Styling untuk header
-        $sheet->getStyle('A1:G1')->applyFromArray([
+        $sheet->getStyle('A1:F1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['argb' => 'FFFFFF'],
@@ -66,11 +63,11 @@ class TemplateExport implements FromArray, WithHeadings, WithStyles
         ]);
 
         // Set kolom dengan alignment tengah untuk data
-        $sheet->getStyle('A2:G100')->getAlignment()->setHorizontal('center');
-        $sheet->getStyle('A2:G100')->getAlignment()->setVertical('center');
+        $sheet->getStyle('A2:F100')->getAlignment()->setHorizontal('center');
+        $sheet->getStyle('A2:F100')->getAlignment()->setVertical('center');
 
         // Menyesuaikan ukuran kolom agar responsif dengan panjang data
-        foreach (range('A', 'G') as $column) {
+        foreach (range('A', 'F') as $column) {
             $sheet->getColumnDimension($column)->setAutoSize(true);
         }
 

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->enum('type', ['masuk', 'keluar']);
             $table->string('description');
             $table->date('transaction_date');
+            $table->foreignId('paket_id')->constrained('pakets')->onDelete('cascade');
             $table->timestamps();
         });
     }

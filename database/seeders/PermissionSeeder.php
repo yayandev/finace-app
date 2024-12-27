@@ -30,6 +30,12 @@ class PermissionSeeder extends Seeder
             'edit-permissions',
             'delete-permissions',
 
+            // Paket management
+            'view-pakets',
+            'create-pakets',
+            'edit-pakets',
+            'delete-pakets',
+
             // Category management
             'view-categories',
             'create-categories',

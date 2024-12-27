@@ -1,5 +1,7 @@
 <?php
 
+use App\Exports\CategoriesExport;
+use App\Exports\PaketsExport;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TransactionController;
@@ -8,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\TransactionsExport;
+use App\Http\Controllers\PaketController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\SummaryController;
@@ -41,7 +44,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/reports/summary', [SummaryController::class, 'index'])->name('reports.summary');
     Route::get('/transactions/summary', [SummaryController::class, 'getSummary'])->name('transactions.summary');
 
-    Route::resource('categories', CategoryController::class);
+    Route::resource('master/categories', CategoryController::class);
     Route::resource('transactions', TransactionController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
     Route::get('/dashboard', function () {
         $start_date = now()->startOfMonth();
@@ -132,16 +135,19 @@ Route::middleware(['auth'])->group(function () {
         $start_date = $request->input('date_start');
         $end_date = $request->input('date_end');
         $type = $request->input('type');
+        $category_id = $request->input('category_id');
+        $paket_id = $request->input('paket_id');
 
         // Return the export file with filters applied
-        return Excel::download(new TransactionsExport($start_date, $end_date, $type), 'transactions.xlsx');
+        return Excel::download(new TransactionsExport($start_date, $end_date, $type, $category_id, $paket_id), 'transactions.xlsx');
     })->name('transactions.export');
     Route::post('/transactions/import', [TransactionExportImportController::class, 'import'])->name('transactions.import');
     Route::get('/download-template', [TransactionExportImportController::class, 'downloadTemplate'])->name('transactions.downloadTemplate');
 
-    Route::resource('roles', RolesController::class);
-    Route::resource('permissions', PermissionController::class);
-    Route::resource('users', UserController::class);
+    Route::resource('master/roles', RolesController::class);
+    Route::resource('master/permissions', PermissionController::class);
+    Route::resource('master/users', UserController::class);
+    Route::resource('master/pakets', PaketController::class);
 
     Route::get('/settings/account', function () {
         return view('settings.account');
@@ -149,6 +155,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/settings/security', function () {
         return view('settings.security');
     })->name('settings.security');
+
+    Route::get('/categories/export', function () {
+        return Excel::download(new CategoriesExport, 'categories.xlsx');
+    });
+    Route::get('/pakets/export', function () {
+        return Excel::download(new PaketsExport, 'pakets.xlsx');
+    });
 });
 
 Route::middleware(['guest'])->group(function () {

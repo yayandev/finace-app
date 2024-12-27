@@ -15,7 +15,8 @@ class Transaction extends Model
         'amount',
         'type',
         'description',
-        'transaction_date'
+        'transaction_date',
+        'paket_id'
     ];
 
     protected $casts = [
@@ -30,5 +31,10 @@ class Transaction extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function paket()
+    {
+        return $this->belongsTo(Paket::class);
     }
 }

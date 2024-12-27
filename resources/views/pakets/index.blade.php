@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Categories')
+@section('title', 'Pakets')
 
 @push('css')
     <link rel="stylesheet" href="/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
@@ -15,14 +15,15 @@
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="d-flex justify-content-between mb-3">
-            <h5 class="m-0">Daftar Kategori</h5>
-            {{-- button modal add --}}
+            <h5 class="m-0">Daftar Paket</h5>
             <div class="d-flex gap-3 flex-wrap">
-                <a href="/categories/export" class="btn btn-success">
-                    <i class="mdi mdi-file-excel"></i> Export Kategori
+                {{-- button export --}}
+                <a href="/pakets/export" class="btn btn-success">
+                    <i class="mdi mdi-download"></i> Export Excel
                 </a>
+                {{-- button modal add --}}
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-add">
-                    <i class="mdi mdi-plus"></i> Tambah Kategori
+                    <i class="mdi mdi-plus"></i> Tambah Paket
                 </button>
             </div>
         </div>
@@ -34,7 +35,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
-                            <th>Type</th>
+                            <th>Description</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -48,7 +49,7 @@
     <div class="modal fade" id="modal-add" tabindex="-1" role="dialog" aria-labelledby="modal-add" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <form action="{{ route('categories.store') }}" method="POST">
+                <form action="{{ route('pakets.store') }}" method="POST">
                     @csrf
                     <div class="modal-header">
                         <h5 class="modal-title">Tambah Kategori</h5>
@@ -61,11 +62,8 @@
                             <input type="text" class="form-control" id="name" name="name" required>
                         </div>
                         <div class="mb-3">
-                            <label for="type" class="form-label">Tipe</label>
-                            <select name="type" id="type" class="form-select" required>
-                                <option value="masuk">Masuk</option>
-                                <option value="keluar">Keluar</option>
-                            </select>
+                            <label for="description" class="form-label">Description</label>
+                            <textarea name="description" id="description" cols="30" rows="5" class="form-control"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -95,11 +93,8 @@
                             <input type="text" class="form-control" id="name" name="name" required>
                         </div>
                         <div class="mb-3">
-                            <label for="type" class="form-label">Tipe</label>
-                            <select name="type" id="type" class="form-select" required>
-                                <option value="masuk">Masuk</option>
-                                <option value="keluar">Keluar</option>
-                            </select>
+                            <label for="description" class="form-label">Description</label>
+                            <textarea name="description" id="description" cols="30" rows="5" class="form-control"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -129,16 +124,8 @@
                         name: 'name'
                     },
                     {
-                        data: 'type',
-                        name: 'type',
-                        render: function(data, type, row) {
-                            if (data === 'masuk') {
-                                return '<span class="badge bg-success">Masuk</span>';
-                            } else if (data === 'keluar') {
-                                return '<span class="badge bg-danger">Keluar</span>';
-                            }
-                            return data;
-                        }
+                        data: 'description',
+                        name: 'description',
                     },
                     {
                         data: 'id',
@@ -147,10 +134,10 @@
                         searchable: false,
                         render: function(data, type, row) {
                             return `
-                        <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modal-edit" data-id="${data}" data-name="${row.name}" data-type="${row.type}">
+                        <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modal-edit" data-id="${data}" data-name="${row.name}" data-description="${row.description}">
                             <i class="mdi mdi-pencil"></i>
                         </button>
-                            <form action="/master/categories/${data}" method="POST" class="d-inline">
+                            <form action="/master/pakets/${data}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
@@ -169,12 +156,12 @@
             var button = $(event.relatedTarget);
             var id = button.data('id');
             var name = button.data('name');
-            var type = button.data('type');
+            var description = button.data('description');
 
             var modal = $(this);
             modal.find('.modal-body #name').val(name);
-            modal.find('.modal-body #type').val(type);
-            modal.find('#form-edit').attr('action', '/master/categories/' + id);
+            modal.find('.modal-body #description').val(description);
+            modal.find('#form-edit').attr('action', '/master/pakets/' + id);
         });
     </script>
 @endpush
