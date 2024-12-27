@@ -23,8 +23,21 @@
         <!-- Change Password -->
         <div class="card mb-4">
           <h5 class="card-header">Change Password</h5>
+         {{-- looping semua error disini --}}
+            @if ($errors->any())
+            <div class="alert alert-danger m-3">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>
+                        {{$error}}
+                    </li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
           <div class="card-body">
-            <form id="formAccountSettings" method="GET" onsubmit="return false">
+            <form id="formAccountSettings" method="POST" action="{{route('change.password')}}">
+                @csrf
               <div class="row">
                 <div class="mb-3 col-md-6 form-password-toggle">
                   <div class="input-group input-group-merge">
@@ -32,7 +45,7 @@
                       <input
                         class="form-control"
                         type="password"
-                        name="currentPassword"
+                        name="current_password"
                         id="currentPassword"
                         placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" />
                       <label for="currentPassword">Current Password</label>
@@ -51,7 +64,7 @@
                         class="form-control"
                         type="password"
                         id="newPassword"
-                        name="newPassword"
+                        name="new_password"
                         placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" />
                       <label for="newPassword">New Password</label>
                     </div>
@@ -66,7 +79,7 @@
                       <input
                         class="form-control"
                         type="password"
-                        name="confirmPassword"
+                        name="password_confirmation"
                         id="confirmPassword"
                         placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" />
                       <label for="confirmPassword">Confirm New Password</label>
@@ -85,7 +98,6 @@
               </ul>
               <div class="mt-4">
                 <button type="submit" class="btn btn-primary me-2">Save changes</button>
-                <button type="reset" class="btn btn-outline-secondary">Cancel</button>
               </div>
             </form>
           </div>

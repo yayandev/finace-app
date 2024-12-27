@@ -16,6 +16,26 @@ use App\Models\Transaction;
 use Illuminate\Support\Facades\DB;
 
 Route::middleware(['auth'])->group(function () {
+    Route::post('/change-password', function (Request $request) {
+        $request->validate([
+            'current_password' => 'required|string',
+            'new_password' => 'required|string|min:8|confirmed|different:current_password|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/',
+        ]);
+
+        if (!auth()->validate([
+            'email' => auth()->user()->email,
+            'password' => $request->current_password,
+        ])) {
+            return back()->with('error', 'Invalid current password');
+        }
+
+        auth()->user()->update([
+            'password' => bcrypt($request->new_password),
+        ]);
+
+        return back()->with('success', 'Password changed successfully');
+    })->name('change.password');
+
     Route::get('/finance/data', [TransactionController::class, 'getFinanceData'])->name('finance.data');
 
     Route::get('/reports/summary', [SummaryController::class, 'index'])->name('reports.summary');
