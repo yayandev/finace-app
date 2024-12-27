@@ -24,6 +24,10 @@ class TransactionController extends Controller implements HasMiddleware
         if (request()->ajax()) {
             $query = Transaction::query()->with('category', 'user');
 
+            if (auth()->user()->hasRole('user')) {
+                $query->where('user_id', auth()->id());
+            }
+
             // Filter by date range
             if ($start = request('date_start')) {
                 $query->whereDate('transaction_date', '>=', $start);

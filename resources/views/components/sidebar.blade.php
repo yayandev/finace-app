@@ -120,7 +120,7 @@
         @endcan
       <!-- Pengaturan -->
       <li class="menu-item {{ Request::is('settings*') ? 'active' : '' }}">
-        <a href="/settings" class="menu-link">
+        <a href="/settings/security" class="menu-link">
           <i class="menu-icon tf-icons mdi mdi-cog-outline"></i>
           <div>Pengaturan</div>
         </a>

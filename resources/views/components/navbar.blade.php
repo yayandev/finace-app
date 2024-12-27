@@ -66,13 +66,13 @@ id="layout-navbar">
                 <div class="dropdown-divider"></div>
             </li>
             <li>
-                <a class="dropdown-item" href="">
+                <a class="dropdown-item" href="/settings/account">
                     <i class="mdi mdi-account-outline me-2"></i>
                     <span class="align-middle">Profil Saya</span>
                 </a>
             </li>
             <li>
-                <a class="dropdown-item" href="">
+                <a class="dropdown-item" href="/settings/security">
                     <i class="mdi mdi-cog-outline me-2"></i>
                     <span class="align-middle">Pengaturan</span>
                 </a>
