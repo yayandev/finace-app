@@ -25,8 +25,9 @@
                     </div>
 
                     <div class="col-md-6 mb-3">
-                        <label for="amount">Jumlah</label>
-                        <input type="number" class="form-control" id="amount" name="amount" required>
+                        <label for="amount-display">Jumlah</label>
+                        <input type="text" class="form-control" id="amount-display" required>
+                        <input type="hidden" id="amount" name="amount">
                         @error('amount')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -75,3 +76,26 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/cleave.js@1.6.0/dist/cleave.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Inisialisasi Cleave.js
+        const cleaveInstance = new Cleave('#amount-display', {
+            numeral: true,
+            numeralThousandsGroupStyle: 'thousand',
+            prefix: 'Rp ',
+            noImmediatePrefix: false,
+            rawValueTrimPrefix: true
+        });
+
+        //event ketika input amount display change
+        document.getElementById('amount-display').addEventListener('input', function (e) {
+            //set value amount dengan value dari cleave
+            document.getElementById('amount').value = cleaveInstance.getRawValue();
+        });
+    });
+</script>
+@endpush

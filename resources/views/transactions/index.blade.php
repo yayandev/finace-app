@@ -89,6 +89,44 @@
     </div>
 </div>
 
+<!-- Modal Detail -->
+<div class="modal fade" id="modal-detail" tabindex="-1" role="dialog" aria-labelledby="modal-detail" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detail Transaksi</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="mb-3">
+                    <label class="form-label">Type</label>
+                    <input type="text" id="type" class="form-control" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Category</label>
+                    <input type="text" id="category" class="form-control" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label"
+                        >Amount</label
+                    >
+                    <input type="text" id="amount" class="form-control" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Date</label>
+                    <input type="text" id="date" class="form-control" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <textarea id="description" class="form-control" readonly></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 @endsection
 
 @push('scripts')
@@ -154,6 +192,9 @@ $(document).ready(function () {
                 searchable: false,
                 render: function (data, type, row) {
                     return `
+                        <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#modal-detail" data-id="${data}" data-type="${row.type}" data-category="${row.category.name}" data-amount="${row.amount}" data-date="${row.transaction_date}" data-description="${row.description}">
+                            <i class="mdi mdi-eye"></i>
+                            </button>
                         <a class="btn btn-sm btn-warning" href="/transactions/${data}/edit">
                             <i class="mdi mdi-pencil"></i>
                         </a>
@@ -203,6 +244,26 @@ $(document).ready(function () {
         // Update the export button URL
         btnExport.attr('href', `${url}?date_start=${dateStart}&date_end=${dateEnd}&type=${type}`);
     });
+});
+
+// Show detail modal
+$('#modal-detail').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget);
+    var modal = $(this);
+
+    modal.find('#type').val(button.data('type'));
+    modal.find('#category').val(button.data('category'));
+    modal.find('#amount').val(new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        maximumFractionDigits: 0
+    }).format(button.data('amount')));
+    modal.find('#date').val(new Date(button.data('date')).toLocaleDateString('id-ID', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    }));
+    modal.find('#description').val(button.data('description'));
 });
 </script>
 @endpush

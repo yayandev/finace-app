@@ -35,7 +35,8 @@
 
                     <div class="col-md-6 mb-3">
                         <label for="amount">Jumlah</label>
-                        <input type="number" value="{{$transaction->amount}}" class="form-control" id="amount" name="amount" required>
+                        <input type="text" class="form-control" id="amount-display" required value="{{$transaction->amount}}">
+                        <input type="hidden" id="amount" name="amount" value="{{ $transaction->amount }}">
                         @error('amount')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -125,7 +126,28 @@
 <script src="/assets/vendor/libs/quill/katex.js"></script>
 <script src="/assets/vendor/libs/quill/quill.js"></script>
 <script src="/assets/js/forms-editors.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/cleave.js@1.6.0/dist/cleave.min.js"></script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Inisialisasi Cleave.js
+        const cleaveInstance = new Cleave('#amount-display', {
+            numeral: true,
+            numeralThousandsGroupStyle: 'thousand',
+            prefix: 'Rp ',
+            noImmediatePrefix: false,
+            rawValueTrimPrefix: true,
+            // hapus nol di belakang .
+            stripLeadingZeroes: true
+        });
+
+        //event ketika input amount display change
+        document.getElementById('amount-display').addEventListener('input', function (e) {
+            //set value amount dengan value dari cleave
+            document.getElementById('amount').value = cleaveInstance.getRawValue();
+        });
+    });
+</script>
 <script>
     var quill = new Quill('#snow-editor', {
         theme: 'snow',

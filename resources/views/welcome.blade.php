@@ -39,7 +39,7 @@
                             </div>
                         </div>
                         <div class="card-info mt-4 pt-1 mt-lg-1 mt-xl-4">
-                            <h5 class="mb-2">Rp. {{ number_format($income, 0, ',', '.') }}</h5>
+                            <h6 class="mb-2">Rp. {{ number_format($income, 0, ',', '.') }}</h6>
                             <p class="mb-lg-2 mb-xl-3">Total Masuk</p>
                             <div class="badge bg-label-secondary rounded-pill">Keseluruhan</div>
                         </div>
@@ -60,7 +60,7 @@
                             </div>
                         </div>
                         <div class="card-info mt-4 pt-1 mt-lg-1 mt-xl-4">
-                            <h5 class="mb-2">Rp. {{ number_format($expense, 0, ',', '.') }}</h5>
+                            <h6 class="mb-2">Rp. {{ number_format($expense, 0, ',', '.') }}</h6>
                             <p class="mb-lg-2 mb-xl-3">Total Keluar</p>
                             <div class="badge bg-label-secondary rounded-pill">Keseluruhan</div>
                         </div>
@@ -81,7 +81,7 @@
                             </div>
                         </div>
                         <div class="card-info mt-4 pt-1 mt-lg-1 mt-xl-4">
-                            <h5 class="mb-2">Rp. {{ number_format($balance, 0, ',', '.') }}</h5>
+                            <h6 class="mb-2">Rp. {{ number_format($balance, 0, ',', '.') }}</h6>
                             <p class="mb-lg-2 mb-xl-3">Saldo</p>
                             <div class="badge bg-label-secondary rounded-pill">Masuk - Keluar</div>
                         </div>
@@ -178,7 +178,7 @@
                             </div>
                         </div>
                         <div class="card-info mt-4 pt-1 mt-lg-1 mt-xl-4">
-                            <h5 class="mb-2">Rp. {{ number_format($totalUangMasukTahunIni, 0, ',', '.') }}</h5>
+                            <h6 class="mb-2">Rp. {{ number_format($totalUangMasukTahunIni, 0, ',', '.') }}</h6>
                             <p class="mb-lg-2 mb-xl-3">Uang Masuk</p>
                             <div class="badge bg-label-secondary rounded-pill">Tahun ini</div>
                         </div>
@@ -198,7 +198,7 @@
                             </div>
                         </div>
                         <div class="card-info mt-4 pt-1 mt-lg-1 mt-xl-4">
-                            <h5 class="mb-2">Rp. {{ number_format($totalUangMasukBulanIni, 0, ',', '.') }}</h5>
+                            <h6 class="mb-2">Rp. {{ number_format($totalUangMasukBulanIni, 0, ',', '.') }}</h6>
                             <p class="mb-lg-2 mb-xl-3">Uang Masuk</p>
                             <div class="badge bg-label-secondary rounded-pill">Bulan ini</div>
                         </div>
@@ -219,7 +219,7 @@
                             </div>
                         </div>
                         <div class="card-info mt-4 pt-1 mt-lg-1 mt-xl-4">
-                            <h5 class="mb-2">Rp. {{ number_format($totalUangMasukHariIni, 0, ',', '.') }}</h5>
+                            <h6 class="mb-2">Rp. {{ number_format($totalUangMasukHariIni, 0, ',', '.') }}</h6>
                             <p class="mb-lg-2 mb-xl-3">Uang Masuk</p>
                             <div class="badge bg-label-secondary rounded-pill">Hari ini</div>
                         </div>
@@ -241,7 +241,7 @@
                             </div>
                         </div>
                         <div class="card-info mt-4 pt-1 mt-lg-1 mt-xl-4">
-                            <h5 class="mb-2">Rp. {{ number_format($totalUangKeluarTahunIni, 0, ',', '.') }}</h5>
+                            <h6 class="mb-2">Rp. {{ number_format($totalUangKeluarTahunIni, 0, ',', '.') }}</h6>
                             <p class="mb-lg-2 mb-xl-3">Uang Keluar</p>
                             <div class="badge bg-label-secondary rounded-pill">Tahun ini</div>
                         </div>
@@ -261,7 +261,7 @@
                             </div>
                         </div>
                         <div class="card-info mt-4 pt-1 mt-lg-1 mt-xl-4">
-                            <h5 class="mb-2">Rp. {{ number_format($totalUangKeluarBulanIni, 0, ',', '.') }}</h5>
+                            <h6 class="mb-2">Rp. {{ number_format($totalUangKeluarBulanIni, 0, ',', '.') }}</h6>
                             <p class="mb-lg-2 mb-xl-3">Uang Keluar</p>
                             <div class="badge bg-label-secondary rounded-pill">Bulan ini</div>
                         </div>
@@ -282,7 +282,7 @@
                             </div>
                         </div>
                         <div class="card-info mt-4 pt-1 mt-lg-1 mt-xl-4">
-                            <h5 class="mb-2">Rp. {{ number_format($totalUangKeluarHariIni, 0, ',', '.') }}</h5>
+                            <h6 class="mb-2">Rp. {{ number_format($totalUangKeluarHariIni, 0, ',', '.') }}</h6>
                             <p class="mb-lg-2 mb-xl-3">Uang Keluar</p>
                             <div class="badge bg-label-secondary rounded-pill">Hari ini</div>
                         </div>
