@@ -23,7 +23,7 @@
                 <div class="col-md-4 d-flex align-items-center flex-wrap gap-3">
                     <button type="submit" class="btn btn-primary mt-4">Tampilkan</button>
                     @if ($transaksiMasuk)
-                        <a href="/ringkasan-transaksi-paket?paket_id={{ $paket->id }}"
+                        <a href="/ringkasan-transaksi-paket?paket_id={{ $paketSelected->id }}"
                             class="btn btn-outline-primary mt-4">
                             Export Excel
                         </a>
