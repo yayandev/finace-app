@@ -84,7 +84,7 @@
                         <thead>
                             <tr>
                                 <th colspan="3" class="text-center">
-                                    Ringkasan Laporan Keluar {{ $paket->name }}
+                                    Ringkasan Laporan Keluar {{ $paketSelected->name }}
                                 </th>
                             </tr>
                             <tr>
