@@ -43,7 +43,7 @@
                     @can('view-pakets')
                         <li class="menu-item {{ Request::is('master/pakets') ? 'active' : '' }}">
                             <a href="/master/pakets" class="menu-link">
-                                <div>Paket</div>
+                                <div>Paket Pekerja</div>
                             </a>
                         </li>
                     @endcan

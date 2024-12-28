@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Pakets')
+@section('title', 'Paket Pekerja')
 
 @push('css')
     <link rel="stylesheet" href="/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css" />
@@ -10,7 +10,7 @@
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="d-flex justify-content-between mb-3">
-            <h5 class="m-0">Daftar Paket</h5>
+            <h5 class="m-0">Daftar Paket Pekerja</h5>
             <div class="d-flex gap-3 flex-wrap">
                 {{-- button export --}}
                 <a href="/pakets/export" class="btn btn-success">
@@ -46,7 +46,7 @@
                 <form action="{{ route('pakets.store') }}" method="POST">
                     @csrf
                     <div class="modal-header">
-                        <h5 class="modal-title">Tambah Paket</h5>
+                        <h5 class="modal-title">Tambah Paket Pekerja</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -78,7 +78,7 @@
                     @csrf
                     @method('PUT')
                     <div class="modal-header">
-                        <h5 class="modal-title">Edit Paket</h5>
+                        <h5 class="modal-title">Edit Paket Pekerja</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">

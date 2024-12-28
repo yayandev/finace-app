@@ -100,8 +100,9 @@
                             <th>Type</th>
                             <th>Category</th>
                             <th>Paket</th>
-                            <th>Amount</th>
+                            <th>Harga</th>
                             <th>Date</th>
+                            <th>Description</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -246,6 +247,10 @@
                                 day: 'numeric'
                             });
                         }
+                    },
+                    {
+                        data: 'description',
+                        name: 'description'
                     },
                     {
                         data: 'id',
