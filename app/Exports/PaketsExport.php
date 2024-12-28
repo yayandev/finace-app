@@ -17,7 +17,7 @@ class PaketsExport implements FromCollection, WithHeadings, WithStyles
      */
     public function collection()
     {
-        return Paket::select('id', 'name', 'description', 'created_at', 'updated_at')->get();
+        return Paket::select('id', 'name', 'nilai', 'created_at', 'updated_at')->get();
     }
 
     /**
@@ -30,7 +30,7 @@ class PaketsExport implements FromCollection, WithHeadings, WithStyles
         return [
             'ID',           // ID Paket
             'Name',         // Nama Paket
-            'Description',  // Deskripsi Paket
+            'Nilai',  // Deskripsi Paket
             'Created At',   // Tanggal dibuat
             'Updated At',   // Tanggal diperbarui
         ];

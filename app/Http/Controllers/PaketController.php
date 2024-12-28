@@ -30,7 +30,7 @@ class PaketController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string|max:500',
+            'nilai' => 'required|numeric',
         ]);
 
         Paket::create($request->all());
@@ -56,7 +56,7 @@ class PaketController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string|max:500',
+            'nilai' => 'required|numeric',
         ]);
 
         $paket = Paket::findOrFail($id);

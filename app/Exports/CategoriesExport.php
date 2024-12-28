@@ -17,7 +17,7 @@ class CategoriesExport implements FromCollection, WithHeadings, WithStyles
      */
     public function collection()
     {
-        return Category::select('id', 'name', 'type', 'user_id', 'created_at', 'updated_at')->get();
+        return Category::select('id', 'name',  'user_id', 'created_at', 'updated_at')->get();
     }
 
     /**
@@ -30,7 +30,6 @@ class CategoriesExport implements FromCollection, WithHeadings, WithStyles
         return [
             'ID',           // ID kategori
             'Name',         // Nama kategori
-            'Type',         // Jenis kategori (masuk atau keluar)
             'User ID',      // ID pengguna yang membuat kategori
             'Created At',   // Tanggal kategori dibuat
             'Updated At',   // Tanggal kategori diperbarui
@@ -46,7 +45,7 @@ class CategoriesExport implements FromCollection, WithHeadings, WithStyles
     public function styles(Worksheet $sheet)
     {
         // Styling untuk header
-        $sheet->getStyle('A1:F1')->applyFromArray([
+        $sheet->getStyle('A1:E1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['argb' => 'FFFFFF'],
@@ -67,7 +66,7 @@ class CategoriesExport implements FromCollection, WithHeadings, WithStyles
         $sheet->getStyle('A2:F100')->getAlignment()->setVertical('center');
 
         // Menyesuaikan ukuran kolom agar responsif dengan panjang data
-        foreach (range('A', 'F') as $column) {
+        foreach (range('A', 'E') as $column) {
             $sheet->getColumnDimension($column)->setAutoSize(true);
         }
 

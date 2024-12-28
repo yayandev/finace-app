@@ -8,5 +8,5 @@ class Paket extends Model
 {
     //
 
-    protected $fillable = ['name', 'description'];
+    protected $fillable = ['name', 'nilai'];
 }

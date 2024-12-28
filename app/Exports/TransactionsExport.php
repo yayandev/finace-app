@@ -61,6 +61,7 @@ class TransactionsExport implements FromCollection, WithHeadings, ShouldAutoSize
                 'id' => $transaction->id,
                 'type' => ucfirst($transaction->type),
                 'paket' => $transaction->paket->name ?? '-',
+                'nilai_paket' => $transaction->paket->nilai ?? '-',
                 'category' => $transaction->category->name ?? '-',
                 'amount' => number_format($transaction->amount, 2), // Format angka
                 'transaction_date' => $transaction->transaction_date->format('Y-m-d'),
@@ -75,6 +76,7 @@ class TransactionsExport implements FromCollection, WithHeadings, ShouldAutoSize
             'id' => '',
             'type' => '',
             'paket' => '',
+            'nilai_paket' => '',
             'category' => 'Total',
             'amount' => number_format($totalAmount, 2),
             'transaction_date' => '',
@@ -90,6 +92,7 @@ class TransactionsExport implements FromCollection, WithHeadings, ShouldAutoSize
             'ID',
             'Type',
             'Paket',
+            'Nilai Paket',
             'Category',
             'Amount',
             'Transaction Date',
@@ -100,7 +103,7 @@ class TransactionsExport implements FromCollection, WithHeadings, ShouldAutoSize
     public function styles(Worksheet $sheet)
     {
         // Styling header
-        $sheet->getStyle('A1:F1')->applyFromArray([
+        $sheet->getStyle('A1:G1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['argb' => 'FFFFFF'],

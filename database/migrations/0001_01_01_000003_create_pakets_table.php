@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('pakets', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('description')->nullable();
+            $table->decimal('nilai', 15, 2);
             $table->timestamps();
         });
     }

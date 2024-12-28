@@ -39,7 +39,6 @@ class CategoryController extends Controller implements HasMiddleware
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'type' => 'required|in:masuk,keluar',
         ]);
 
         auth()->user()->categories()->create($validated);
@@ -57,7 +56,6 @@ class CategoryController extends Controller implements HasMiddleware
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'type' => 'required|in:masuk,keluar',
         ]);
 
         $category->update($validated);

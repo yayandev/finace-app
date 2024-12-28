@@ -3,13 +3,8 @@
 @section('title', 'Pakets')
 
 @push('css')
-    <link rel="stylesheet" href="/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
-    <link rel="stylesheet" href="/assets/vendor/libs/typeahead-js/typeahead.css" />
     <link rel="stylesheet" href="/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css" />
     <link rel="stylesheet" href="/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css" />
-    <link rel="stylesheet" href="/assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css" />
-    <link rel="stylesheet" href="/assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css" />
-    <link rel="stylesheet" href="/assets/vendor/libs/flatpickr/flatpickr.css" />
 @endpush
 
 @section('content')
@@ -34,16 +29,15 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Actions</th>
+                            <th>Nama</th>
+                            <th>Nilai</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                 </table>
             </div>
         </div>
     </div>
-
 
     {{-- modal add --}}
     <div class="modal fade" id="modal-add" tabindex="-1" role="dialog" aria-labelledby="modal-add" aria-hidden="true">
@@ -52,23 +46,24 @@
                 <form action="{{ route('pakets.store') }}" method="POST">
                     @csrf
                     <div class="modal-header">
-                        <h5 class="modal-title">Tambah Kategori</h5>
+                        <h5 class="modal-title">Tambah Paket</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body
-            ">
+                    <div class="modal-body">
                         <div class="mb-3">
-                            <label for="name" class="form-label">Nama Kategori</label>
+                            <label for="name" class="form-label">Nama Paket</label>
                             <input type="text" class="form-control" id="name" name="name" required>
                         </div>
                         <div class="mb-3">
-                            <label for="description" class="form-label">Description</label>
-                            <textarea name="description" id="description" cols="30" rows="5" class="form-control"></textarea>
+                            <label for="nilai_formatted" class="form-label">Nilai</label>
+                            <input type="text" class="form-control" id="nilai_formatted" oninput="formatRupiah(this)"
+                                required>
+                            <input type="hidden" id="nilai" name="nilai">
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
                     </div>
                 </form>
             </div>
@@ -83,34 +78,55 @@
                     @csrf
                     @method('PUT')
                     <div class="modal-header">
-                        <h5 class="modal-title">Tambah Kategori</h5>
+                        <h5 class="modal-title">Edit Paket</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body
-        ">
+                    <div class="modal-body">
                         <div class="mb-3">
-                            <label for="name" class="form-label">Nama Kategori</label>
-                            <input type="text" class="form-control" id="name" name="name" required>
+                            <label for="edit-name" class="form-label">Nama Paket</label>
+                            <input type="text" class="form-control" id="edit-name" name="name" required>
                         </div>
                         <div class="mb-3">
-                            <label for="description" class="form-label">Description</label>
-                            <textarea name="description" id="description" cols="30" rows="5" class="form-control"></textarea>
+                            <label for="edit-nilai-formatted" class="form-label">Nilai</label>
+                            <input type="text" class="form-control" id="edit-nilai-formatted"
+                                oninput="formatRupiah(this)" required>
+                            <input type="hidden" id="edit-nilai" name="nilai">
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
 @endsection
 
 @push('scripts')
     <script src="/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
     <script>
+        // Format Rupiah untuk input
+        function formatRupiah(input) {
+            const numberString = input.value.replace(/[^,\d]/g, "").toString();
+            const split = numberString.split(",");
+            const sisa = split[0].length % 3;
+            let rupiah = split[0].substr(0, sisa);
+            const ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                const separator = sisa ? "." : "";
+                rupiah += separator + ribuan.join(".");
+            }
+
+            input.value = split[1] !== undefined ? rupiah + "," + split[1] : rupiah;
+            const numericValue = parseFloat(numberString.replace(/\./g, "").replace(",", "."));
+            document.getElementById("nilai").value = numericValue || 0;
+        }
+
         $(document).ready(function() {
+            // Render DataTable
             $('#tbl_list').DataTable({
                 processing: true,
                 serverSide: true,
@@ -124,8 +140,15 @@
                         name: 'name'
                     },
                     {
-                        data: 'description',
-                        name: 'description',
+                        data: 'nilai',
+                        name: 'nilai',
+                        render: function(data) {
+                            return new Intl.NumberFormat('id-ID', {
+                                style: 'currency',
+                                currency: 'IDR',
+                                maximumFractionDigits: 0
+                            }).format(data);
+                        }
                     },
                     {
                         data: 'id',
@@ -134,34 +157,39 @@
                         searchable: false,
                         render: function(data, type, row) {
                             return `
-                        <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modal-edit" data-id="${data}" data-name="${row.name}" data-description="${row.description}">
-                            <i class="mdi mdi-pencil"></i>
-                        </button>
-                            <form action="/master/pakets/${data}" method="POST" class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
-                                    <i class="mdi mdi-delete"></i>
+                                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modal-edit" data-id="${data}" data-name="${row.name}" data-nilai="${row.nilai}">
+                                    <i class="mdi mdi-pencil"></i>
                                 </button>
-                            </form>
-                    `;
+                                <form action="/master/pakets/${data}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus?')">
+                                        <i class="mdi mdi-delete"></i>
+                                    </button>
+                                </form>
+                            `;
                         }
                     }
                 ]
             });
-        });
 
-        // edit
-        $('#modal-edit').on('show.bs.modal', function(event) {
-            var button = $(event.relatedTarget);
-            var id = button.data('id');
-            var name = button.data('name');
-            var description = button.data('description');
+            // Modal Edit
+            $('#modal-edit').on('show.bs.modal', function(event) {
+                const button = $(event.relatedTarget);
+                const id = button.data('id');
+                const name = button.data('name');
+                const nilai = button.data('nilai');
 
-            var modal = $(this);
-            modal.find('.modal-body #name').val(name);
-            modal.find('.modal-body #description').val(description);
-            modal.find('#form-edit').attr('action', '/master/pakets/' + id);
+                const modal = $(this);
+                modal.find('.modal-body #edit-name').val(name);
+                modal.find('.modal-body #edit-nilai-formatted').val(new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    maximumFractionDigits: 0
+                }).format(nilai));
+                modal.find('.modal-body #edit-nilai').val(nilai);
+                modal.find('#form-edit').attr('action', '/master/pakets/' + id);
+            });
         });
     </script>
 @endpush

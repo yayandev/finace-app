@@ -34,7 +34,6 @@
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
-                            <th>Type</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -59,13 +58,6 @@
                         <div class="mb-3">
                             <label for="name" class="form-label">Nama Kategori</label>
                             <input type="text" class="form-control" id="name" name="name" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="type" class="form-label">Tipe</label>
-                            <select name="type" id="type" class="form-select" required>
-                                <option value="masuk">Masuk</option>
-                                <option value="keluar">Keluar</option>
-                            </select>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -94,13 +86,6 @@
                             <label for="name" class="form-label">Nama Kategori</label>
                             <input type="text" class="form-control" id="name" name="name" required>
                         </div>
-                        <div class="mb-3">
-                            <label for="type" class="form-label">Tipe</label>
-                            <select name="type" id="type" class="form-select" required>
-                                <option value="masuk">Masuk</option>
-                                <option value="keluar">Keluar</option>
-                            </select>
-                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
@@ -127,18 +112,6 @@
                     {
                         data: 'name',
                         name: 'name'
-                    },
-                    {
-                        data: 'type',
-                        name: 'type',
-                        render: function(data, type, row) {
-                            if (data === 'masuk') {
-                                return '<span class="badge bg-success">Masuk</span>';
-                            } else if (data === 'keluar') {
-                                return '<span class="badge bg-danger">Keluar</span>';
-                            }
-                            return data;
-                        }
                     },
                     {
                         data: 'id',
@@ -169,11 +142,9 @@
             var button = $(event.relatedTarget);
             var id = button.data('id');
             var name = button.data('name');
-            var type = button.data('type');
 
             var modal = $(this);
             modal.find('.modal-body #name').val(name);
-            modal.find('.modal-body #type').val(type);
             modal.find('#form-edit').attr('action', '/master/categories/' + id);
         });
     </script>
