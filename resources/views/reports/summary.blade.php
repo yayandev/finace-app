@@ -52,7 +52,7 @@
                         </thead>
                         <tbody>
                             @php
-                                $saldo = $paket->nilai;
+                                $saldo = $paketSelected->nilai;
                             @endphp
                             <tr>
                                 <td></td>
@@ -96,7 +96,7 @@
                         </thead>
                         <tbody>
                             @php
-                                $saldo = $paket->nilai;
+                                $saldo = $paketSelected->nilai;
                             @endphp
                             <tr>
                                 <td></td>
