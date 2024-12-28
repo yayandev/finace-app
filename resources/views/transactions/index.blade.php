@@ -106,13 +106,6 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tfoot>
-                        <tr>
-                            <th colspan="4" style="text-align:right">Total:</th>
-                            <th id="total_amount"></th>
-                            <th colspan="2"></th>
-                        </tr>
-                    </tfoot>
                 </table>
             </div>
         </div>
@@ -282,26 +275,6 @@
                         }
                     }
                 ],
-                footerCallback: function(row, data, start, end, display) {
-                    var api = this.api();
-
-                    // Calculate the total for column Amount
-                    var total = api
-                        .column(4)
-                        .data()
-                        .reduce(function(a, b) {
-                            return parseFloat(a) + parseFloat(b);
-                        }, 0);
-
-                    // Update the footer
-                    $(api.column(4).footer()).html(
-                        new Intl.NumberFormat('id-ID', {
-                            style: 'currency',
-                            currency: 'IDR',
-                            maximumFractionDigits: 0
-                        }).format(total)
-                    );
-                }
             });
 
             // Filter button event

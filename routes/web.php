@@ -2,7 +2,6 @@
 
 use App\Exports\CategoriesExport;
 use App\Exports\PaketsExport;
-use App\Exports\RingkasanLaporanExport;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TransactionController;
@@ -13,11 +12,13 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\TransactionsExport;
 use App\Http\Controllers\PaketController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\SummaryController;
 use App\Http\Controllers\UserController;
 use App\Models\Paket;
 use App\Models\Transaction;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 
 Route::middleware(['auth'])->group(function () {
@@ -132,11 +133,16 @@ Route::middleware(['auth'])->group(function () {
     });
 
 
-    Route::get('/ringkasan-transaksi-paket', function (Request $request) {
-        $paket = Paket::find($request->paket_id);
+    Route::get('/ringkasan-transaksi-paket', [ReportController::class, 'exportExcel'])->name('ringkasan-transaksi-paket');
+    Route::get('/pdf-ringkasan-transaksi-paket', function (Request $request) {
+        $paket = Paket::findOrFail($request->paket_id);
+        $transactions = Transaction::where('paket_id', $request->paket_id)
+            ->orderBy('transaction_date', 'asc')
+            ->get();
 
-        return Excel::download(new RingkasanLaporanExport($paket), 'ringkasan_laporan.xlsx');
-    })->name('ringkasan-transaksi-paket');
+        $pdf = Pdf::loadView('myPDF', compact('paket', 'transactions'));
+        return $pdf->stream('ringkasan-transaksi.pdf'); // atau gunakan ->download('ringkasan-transaksi.pdf') untuk unduhan
+    })->name('pdf.ringkasan-transaksi-paket');
 });
 
 Route::middleware(['guest'])->group(function () {

@@ -15,16 +15,14 @@ class SummaryController extends Controller
 
         $paket_id = $request->input('paket_id');
 
-        $transaksiKeluar = [];
-        $transaksiMasuk = [];
+        $transactions = [];
         $paketSelected = [];
 
         if ($paket_id) {
-            $transaksiKeluar = Transaction::where('paket_id', $paket_id)->where('type', 'keluar')->get();
-            $transaksiMasuk = Transaction::where('paket_id', $paket_id)->where('type', 'masuk')->get();
+            $transactions = Transaction::where('paket_id', $paket_id)->get();
             $paketSelected = Paket::find($paket_id);
         }
 
-        return view('reports.summary', compact('paketSelected', 'transaksiKeluar', 'transaksiMasuk', 'pakets'));
+        return view('reports.summary', compact('paketSelected', 'transactions', 'pakets'));
     }
 }

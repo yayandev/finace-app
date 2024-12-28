@@ -34,9 +34,8 @@ class TransactionsImport implements ToModel
                 'description' => $row[6], // Kolom deskripsi
             ]);
         } catch (\Exception $e) {
-            // Menangani error jika tanggal tidak valid
-            // \Log::error('Error parsing date: ' . $e->getMessage());
-            return null; // Atau bisa mengembalikan `false` untuk skip
+            // Menangani error jika tanggal tidak valid munculkan error ke user
+            return null;
         }
     }
 }

@@ -20,12 +20,16 @@
                     </select>
                 </div>
 
-                <div class="col-md-4 d-flex align-items-center flex-wrap gap-3">
+                <div class="col-md-8 d-flex align-items-center flex-wrap gap-3">
                     <button type="submit" class="btn btn-primary mt-4">Tampilkan</button>
-                    @if ($transaksiMasuk)
+                    @if ($transactions)
                         <a href="/ringkasan-transaksi-paket?paket_id={{ $paketSelected->id }}"
                             class="btn btn-outline-primary mt-4">
                             Export Excel
+                        </a>
+                        <a href="/pdf-ringkasan-transaksi-paket?paket_id={{ $paketSelected->id }}"
+                            class="btn btn-outline-primary mt-4">
+                            Export PDF
                         </a>
                     @endif
                 </div>
@@ -33,86 +37,77 @@
         </form>
 
         <!-- Menampilkan Ringkasan Masuk -->
-        @if ($transaksiMasuk)
+        @if ($transactions)
             <div class="card mb-5">
                 <div class="table-responsive">
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th colspan="3" class="text-center">
-                                    Ringkasan Laporan Masuk {{ $paketSelected->name }}
+                                <th></th>
+                                <th colspan="1" class="text-start">
+                                    Ringkasan Laporan {{ $paketSelected->name }}
+                                </th>
+                                <th class="text-start" colspan="2">
+                                    {{ number_format($paketSelected->nilai, 0, ',', '.') }}
                                 </th>
                             </tr>
                             <tr>
+                                <th class="text-start">Tanggal</th>
                                 <th>Uraian Kegiatan</th>
+                                <th class="text-end">Masuk</th>
                                 <th class="text-end">Keluar</th>
-                                <th class="text-end">Saldo</th>
                             </tr>
 
                         </thead>
                         <tbody>
-                            @php
-                                $saldo = $paketSelected->nilai;
-                            @endphp
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td class="text-end">{{ number_format($saldo, 0, ',', '.') }}</td>
-                            </tr>
-                            @foreach ($transaksiMasuk as $item)
-                                @php
-                                    $saldo -= $item->amount;
-                                @endphp
+                            @foreach ($transactions as $item)
                                 <tr>
+                                    <td>{{ $item->transaction_date->format('d/m/Y') }}</td>
                                     <td>{{ $item->description }}</td>
-                                    <td class="text-end">{{ number_format($item->amount, 0, ',', '.') }}</td>
-                                    <td class="text-end">{{ number_format($saldo, 0, ',', '.') }}</td>
+                                    <td class="text-end">
+                                        @if ($item->type == 'masuk')
+                                            {{ number_format($item->amount, 0, ',', '.') }}
+                                        @endif
+                                    </td>
+                                    <td class="text-end">
+                                        @if ($item->type == 'keluar')
+                                            {{ number_format($item->amount, 0, ',', '.') }}
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
+                            <tr>
+                                <td colspan="2" class="text-end">Total</td>
+                                <td class="text-end">
+                                    {{ number_format($transactions->where('type', 'masuk')->sum('amount'), 0, ',', '.') }}
+                                </td>
+                                <td class="text-end">
+                                    {{ number_format($transactions->where('type', 'keluar')->sum('amount'), 0, ',', '.') }}
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         @endif
 
-
-        <!-- Menampilkan Ringkasan Keluar -->
-        @if ($transaksiKeluar)
+        @if ($transactions)
             <div class="card mb-5">
                 <div class="table-responsive">
                     <table class="table table-bordered">
-                        <thead>
+                        <tbody>
                             <tr>
-                                <th colspan="3" class="text-center">
-                                    Ringkasan Laporan Keluar {{ $paketSelected->name }}
+                                <th>Sisa Saldo Tagihan</th>
+                                <th class="text-end">
+                                    {{ number_format($paketSelected->nilai - $transactions->where('type', 'masuk')->sum('amount')) }}
                                 </th>
                             </tr>
                             <tr>
-                                <th>Uraian Kegiatan</th>
-                                <th class="text-end">Keluar</th>
-                                <th class="text-end">Saldo</th>
+                                <th>Sisa Saldo Paket Pekarjaan</th>
+                                <th class="text-end">
+                                    {{ number_format($paketSelected->nilai - $transactions->where('type', 'keluar')->sum('amount')) }}
+                                </th>
                             </tr>
-
-                        </thead>
-                        <tbody>
-                            @php
-                                $saldo = $paketSelected->nilai;
-                            @endphp
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td class="text-end">{{ number_format($saldo, 0, ',', '.') }}</td>
-                            </tr>
-                            @foreach ($transaksiKeluar as $item)
-                                @php
-                                    $saldo -= $item->amount;
-                                @endphp
-                                <tr>
-                                    <td>{{ $item->description }}</td>
-                                    <td class="text-end">{{ number_format($item->amount, 0, ',', '.') }}</td>
-                                    <td class="text-end">{{ number_format($saldo, 0, ',', '.') }}</td>
-                                </tr>
-                            @endforeach
                         </tbody>
                     </table>
                 </div>
