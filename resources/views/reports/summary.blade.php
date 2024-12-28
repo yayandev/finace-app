@@ -40,7 +40,7 @@
                         <thead>
                             <tr>
                                 <th colspan="3" class="text-center">
-                                    Ringkasan Laporan Masuk {{ $paket->name }}
+                                    Ringkasan Laporan Masuk {{ $paketSelected->name }}
                                 </th>
                             </tr>
                             <tr>
