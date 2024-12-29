@@ -91,7 +91,11 @@
                         @enderror
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Simpan</button>
+                <div class="d-flex gap-3 flex-wrap">
+                    <button type="submit" name="action" value="buat" class="btn btn-primary">Buat</button>
+                    <button type="submit" name="action" value="buat_lainnya" class="btn btn-outline-primary">Buat & Buat
+                        Lainnya</button>
+                </div>
             </form>
         </div>
     </div>

@@ -80,8 +80,15 @@ class TransactionController extends Controller implements HasMiddleware
 
         auth()->user()->transactions()->create($validated);
 
-        return redirect()->route('transactions.index')
-            ->with('success', 'Transaksi berhasil ditambahkan');
+        $action = $request->input('action');
+
+        if ($action === 'buat') {
+            return redirect()->route('transactions.index')
+                ->with('success', 'Transaksi berhasil ditambahkan');
+        } else {
+            return redirect()->back()
+                ->with('success', 'Transaksi berhasil ditambahkan');
+        }
     }
 
     public function edit(Transaction $transaction)

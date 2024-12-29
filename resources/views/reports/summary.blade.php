@@ -77,7 +77,7 @@
                                 </tr>
                             @endforeach
                             <tr>
-                                <td colspan="2" class="text-end">Total</td>
+                                <th colspan="2" class="text-start">Total</th>
                                 <td class="text-end">
                                     {{ number_format($transactions->where('type', 'masuk')->sum('amount'), 0, ',', '.') }}
                                 </td>
@@ -85,26 +85,15 @@
                                     {{ number_format($transactions->where('type', 'keluar')->sum('amount'), 0, ',', '.') }}
                                 </td>
                             </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        @endif
-
-        @if ($transactions)
-            <div class="card mb-5">
-                <div class="table-responsive">
-                    <table class="table table-bordered">
-                        <tbody>
                             <tr>
-                                <th>Sisa Saldo Tagihan</th>
-                                <th class="text-end">
+                                <th colspan="2">Sisa Saldo Tagihan</th>
+                                <th class="text-end" colspan="2">
                                     {{ number_format($paketSelected->nilai - $transactions->where('type', 'masuk')->sum('amount')) }}
                                 </th>
                             </tr>
                             <tr>
-                                <th>Sisa Saldo Paket Pekarjaan</th>
-                                <th class="text-end">
+                                <th colspan="2">Sisa Saldo Paket Pekarjaan</th>
+                                <th class="text-end" colspan="2">
                                     {{ number_format($paketSelected->nilai - $transactions->where('type', 'keluar')->sum('amount')) }}
                                 </th>
                             </tr>
