@@ -37,6 +37,10 @@
         .text-start {
             text-align: left;
         }
+
+        .text-center {
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -46,8 +50,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th></th>
-                        <th colspan="1" class="text-start">
+                        <th colspan="2" class="text-center">
                             Ringkasan Laporan {{ $paket->name }}
                         </th>
                         <th class="text-start" colspan="2">

@@ -43,8 +43,7 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th></th>
-                                <th colspan="1" class="text-start">
+                                <th colspan="2" class="text-center">
                                     Ringkasan Laporan {{ $paketSelected->name }}
                                 </th>
                                 <th class="text-start" colspan="2">
