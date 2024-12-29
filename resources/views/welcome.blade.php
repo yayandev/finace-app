@@ -97,37 +97,36 @@
                         <h5 class="mb-0">Transaksi Terakhir</h5>
                     </div>
                     <div class="card-body">
-                       <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Tanggal</th>
-                                    <th>Kategori</th>
-                                    <th>Jumlah</th>
-                                    <th>Tipe</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($latest_transactions as $transaction)
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
                                     <tr>
-                                        <td style="font-size: 12px">{{ $transaction->transaction_date->format('d/m/Y') }}</td>
-                                        <td style="font-size: 12px">{{ $transaction->category->name }}</td>
-                                        <td style="font-size: 12px">Rp. {{ number_format($transaction->amount, 0, ',', '.') }}</td>
-                                        <td style="font-size: 12px">
-                                            {{-- badge --}}
-                                            <span
-                                            @if ($transaction->type == 'masuk')
-                                                class="badge bg-success"
-                                                @else
-                                                class="badge bg-danger"
-                                            @endif
-                                            >{{ $transaction->type}}</span>
-                                        </td>
+                                        <th>Tanggal</th>
+                                        <th>Paket Pekerjaan</th>
+                                        <th>Jumlah</th>
+                                        <th>Tipe</th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                       </div>
+                                </thead>
+                                <tbody>
+                                    @foreach ($latest_transactions as $transaction)
+                                        <tr>
+                                            <td style="font-size: 12px">
+                                                {{ $transaction->transaction_date->format('d/m/Y') }}</td>
+                                            <td style="font-size: 12px">{{ $transaction->paket->name }}</td>
+                                            <td style="font-size: 12px">Rp.
+                                                {{ number_format($transaction->amount, 0, ',', '.') }}</td>
+                                            <td style="font-size: 12px">
+                                                {{-- badge --}}
+                                                <span
+                                                    @if ($transaction->type == 'masuk') class="badge bg-success"
+                                                @else
+                                                class="badge bg-danger" @endif>{{ $transaction->type }}</span>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -140,7 +139,8 @@
                             <h5 class="card-title mb-1">Pemasukan dan Pengeluaran</h5>
                             <select id="selectYear" class="form-select form-select-sm">
                                 @foreach (range(date('Y') - 5, date('Y')) as $year)
-                                    <option value="{{ $year }}" {{ $year == date('Y') ? 'selected' : '' }}>{{ $year }}</option>
+                                    <option value="{{ $year }}" {{ $year == date('Y') ? 'selected' : '' }}>
+                                        {{ $year }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -160,14 +160,14 @@
                         </div>
                     </div>
 
-                  <div class="card-body pt-3">
-                    <canvas id="financeChart" class="chartjs" data-height="500"></canvas>
-                  </div>
+                    <div class="card-body pt-3">
+                        <canvas id="financeChart" class="chartjs" data-height="500"></canvas>
+                    </div>
                 </div>
             </div>
 
-             <!-- Uang Masuk Tahun Ini -->
-             <div class="col-lg-2 col-sm-6">
+            <!-- Uang Masuk Tahun Ini -->
+            <div class="col-lg-2 col-sm-6">
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
@@ -207,8 +207,8 @@
             </div>
             <!--/ Uang Masuk Bulan Ini -->
 
-             <!-- Uang Masuk Hari Ini -->
-             <div class="col-lg-2 col-sm-6">
+            <!-- Uang Masuk Hari Ini -->
+            <div class="col-lg-2 col-sm-6">
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
@@ -270,8 +270,8 @@
             </div>
             <!--/ Uang Keluar Bulan Ini -->
 
-             <!-- Uang Keluar Hari Ini -->
-             <div class="col-lg-2 col-sm-6">
+            <!-- Uang Keluar Hari Ini -->
+            <div class="col-lg-2 col-sm-6">
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
@@ -301,85 +301,90 @@
     <script src="/assets/vendor/libs/chartjs/chartjs.js"></script>
 
     <script>
-        $(document).ready(function () {
-    const ctx = document.getElementById('financeChart').getContext('2d');
-    let financeChart;
+        $(document).ready(function() {
+            const ctx = document.getElementById('financeChart').getContext('2d');
+            let financeChart;
 
-    function fetchDataAndRenderChart(year) {
-        $.ajax({
-            url: '{{ route("finance.data") }}',
-            method: 'GET',
-            data: { year: year },
-            success: function (response) {
-                const { dataPemasukanTahunIniPerbulan, dataPengeluaranTahunIniPerbulan, totalPemasukan, totalPengeluaran } = response;
-
-                // Update badges
-                $('#total_income').text(
-                    new Intl.NumberFormat('id-ID', {
-                        style: 'currency',
-                        currency: 'IDR',
-                        maximumFractionDigits: 0
-                    }).format(totalPemasukan)
-                );
-
-                $('#total_expense').text(
-                    new Intl.NumberFormat('id-ID', {
-                        style: 'currency',
-                        currency: 'IDR',
-                        maximumFractionDigits: 0
-                    }).format(totalPengeluaran)
-                );
-
-                // Update chart
-                if (financeChart) {
-                    financeChart.destroy();
-                }
-
-                financeChart = new Chart(ctx, {
-                    type: 'bar',
+            function fetchDataAndRenderChart(year) {
+                $.ajax({
+                    url: '{{ route('finance.data') }}',
+                    method: 'GET',
                     data: {
-                        labels: @json($months),
-                        datasets: [
-                            {
-                                label: 'Pemasukan',
-                                data: dataPemasukanTahunIniPerbulan,
-                                backgroundColor: 'rgba(40, 167, 69, 0.7)',
-                                borderColor: 'rgba(40, 167, 69, 1)',
-                                borderWidth: 1
-                            },
-                            {
-                                label: 'Pengeluaran',
-                                data: dataPengeluaranTahunIniPerbulan,
-                                backgroundColor: 'rgba(220, 53, 69, 0.7)',
-                                borderColor: 'rgba(220, 53, 69, 1)',
-                                borderWidth: 1
-                            }
-                        ]
+                        year: year
                     },
-                    options: {
-                        responsive: true,
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
+                    success: function(response) {
+                        const {
+                            dataPemasukanTahunIniPerbulan,
+                            dataPengeluaranTahunIniPerbulan,
+                            totalPemasukan,
+                            totalPengeluaran
+                        } = response;
+
+                        // Update badges
+                        $('#total_income').text(
+                            new Intl.NumberFormat('id-ID', {
+                                style: 'currency',
+                                currency: 'IDR',
+                                maximumFractionDigits: 0
+                            }).format(totalPemasukan)
+                        );
+
+                        $('#total_expense').text(
+                            new Intl.NumberFormat('id-ID', {
+                                style: 'currency',
+                                currency: 'IDR',
+                                maximumFractionDigits: 0
+                            }).format(totalPengeluaran)
+                        );
+
+                        // Update chart
+                        if (financeChart) {
+                            financeChart.destroy();
                         }
+
+                        financeChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: @json($months),
+                                datasets: [{
+                                        label: 'Pemasukan',
+                                        data: dataPemasukanTahunIniPerbulan,
+                                        backgroundColor: 'rgba(40, 167, 69, 0.7)',
+                                        borderColor: 'rgba(40, 167, 69, 1)',
+                                        borderWidth: 1
+                                    },
+                                    {
+                                        label: 'Pengeluaran',
+                                        data: dataPengeluaranTahunIniPerbulan,
+                                        backgroundColor: 'rgba(220, 53, 69, 0.7)',
+                                        borderColor: 'rgba(220, 53, 69, 1)',
+                                        borderWidth: 1
+                                    }
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
+                    },
+                    error: function(xhr) {
+                        console.error('Error fetching data:', xhr.responseText);
                     }
                 });
-            },
-            error: function (xhr) {
-                console.error('Error fetching data:', xhr.responseText);
             }
+
+            // Initialize chart with current year
+            fetchDataAndRenderChart($('#selectYear').val());
+
+            // Change year and reload chart
+            $('#selectYear').on('change', function() {
+                fetchDataAndRenderChart($(this).val());
+            });
         });
-    }
-
-    // Initialize chart with current year
-    fetchDataAndRenderChart($('#selectYear').val());
-
-    // Change year and reload chart
-    $('#selectYear').on('change', function () {
-        fetchDataAndRenderChart($(this).val());
-    });
-});
-
     </script>
 @endpush
