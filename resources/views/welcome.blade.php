@@ -5,6 +5,24 @@
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="row gy-4">
+            <div class="content-header-left col-md-9 col-12 mb-2">
+                <div class="row breadcrumbs-top">
+                    <form action="{{ route('home') }}" method="GET">
+                        <div class="col-12 col-sm-6 d-flex gap-3">
+                            {{-- select year --}}
+                            <select id="selectYear" name="year" class="form-select form-select-sm">
+                                @foreach (range(date('Y') - 5, date('Y')) as $year)
+                                    <option value="{{ $year }}"
+                                        {{ $year == request('year', date('Y')) ? 'selected' : '' }}>
+                                        {{ $year }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <button type="submit" class="btn btn-primary btn-sm">Tampilkan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
             <!-- Gamification Card -->
             <div class="col-md-12 col-lg-6">
                 <div class="card h-100">
@@ -137,12 +155,12 @@
                     <div class="card-header d-flex align-items-center justify-content-between">
                         <div>
                             <h5 class="card-title mb-1">Pemasukan dan Pengeluaran</h5>
-                            <select id="selectYear" class="form-select form-select-sm">
+                            {{-- <select id="selectYear" class="form-select form-select-sm">
                                 @foreach (range(date('Y') - 5, date('Y')) as $year)
                                     <option value="{{ $year }}" {{ $year == date('Y') ? 'selected' : '' }}>
                                         {{ $year }}</option>
                                 @endforeach
-                            </select>
+                            </select> --}}
                         </div>
                         <div class="text-end">
                             <span class="badge bg-label-success rounded-pill">
@@ -305,85 +323,62 @@
             const ctx = document.getElementById('financeChart').getContext('2d');
             let financeChart;
 
-            function fetchDataAndRenderChart(year) {
-                $.ajax({
-                    url: '{{ route('finance.data') }}',
-                    method: 'GET',
-                    data: {
-                        year: year
-                    },
-                    success: function(response) {
-                        const {
-                            dataPemasukanTahunIniPerbulan,
-                            dataPengeluaranTahunIniPerbulan,
-                            totalPemasukan,
-                            totalPengeluaran
-                        } = response;
+            const totalPemasukan = @json($totalPemasukan);
+            const totalPengeluaran = @json($totalPengeluaran);
 
-                        // Update badges
-                        $('#total_income').text(
-                            new Intl.NumberFormat('id-ID', {
-                                style: 'currency',
-                                currency: 'IDR',
-                                maximumFractionDigits: 0
-                            }).format(totalPemasukan)
-                        );
+            const dataPemasukanTahunIniPerbulan = @json($dataPemasukanTahunIniPerbulan);
+            const dataPengeluaranTahunIniPerbulan = @json($dataPengeluaranTahunIniPerbulan);
 
-                        $('#total_expense').text(
-                            new Intl.NumberFormat('id-ID', {
-                                style: 'currency',
-                                currency: 'IDR',
-                                maximumFractionDigits: 0
-                            }).format(totalPengeluaran)
-                        );
+            // Update badges
+            $('#total_income').text(
+                new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    maximumFractionDigits: 0
+                }).format(totalPemasukan)
+            );
 
-                        // Update chart
-                        if (financeChart) {
-                            financeChart.destroy();
-                        }
+            $('#total_expense').text(
+                new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    maximumFractionDigits: 0
+                }).format(totalPengeluaran)
+            );
 
-                        financeChart = new Chart(ctx, {
-                            type: 'bar',
-                            data: {
-                                labels: @json($months),
-                                datasets: [{
-                                        label: 'Pemasukan',
-                                        data: dataPemasukanTahunIniPerbulan,
-                                        backgroundColor: 'rgba(40, 167, 69, 0.7)',
-                                        borderColor: 'rgba(40, 167, 69, 1)',
-                                        borderWidth: 1
-                                    },
-                                    {
-                                        label: 'Pengeluaran',
-                                        data: dataPengeluaranTahunIniPerbulan,
-                                        backgroundColor: 'rgba(220, 53, 69, 0.7)',
-                                        borderColor: 'rgba(220, 53, 69, 1)',
-                                        borderWidth: 1
-                                    }
-                                ]
-                            },
-                            options: {
-                                responsive: true,
-                                scales: {
-                                    y: {
-                                        beginAtZero: true
-                                    }
-                                }
-                            }
-                        });
-                    },
-                    error: function(xhr) {
-                        console.error('Error fetching data:', xhr.responseText);
-                    }
-                });
+            // Update chart
+            if (financeChart) {
+                financeChart.destroy();
             }
 
-            // Initialize chart with current year
-            fetchDataAndRenderChart($('#selectYear').val());
-
-            // Change year and reload chart
-            $('#selectYear').on('change', function() {
-                fetchDataAndRenderChart($(this).val());
+            financeChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: @json($months),
+                    datasets: [{
+                            label: 'Pemasukan',
+                            data: dataPemasukanTahunIniPerbulan,
+                            backgroundColor: 'rgba(40, 167, 69, 0.7)',
+                            borderColor: 'rgba(40, 167, 69, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Pengeluaran',
+                            data: dataPengeluaranTahunIniPerbulan,
+                            backgroundColor: 'rgba(220, 53, 69, 0.7)',
+                            borderColor: 'rgba(220, 53, 69, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
             });
         });
     </script>
