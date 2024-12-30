@@ -120,7 +120,7 @@
                                 <thead>
                                     <tr>
                                         <th>Tanggal</th>
-                                        <th>Paket Pekerjaan</th>
+                                        <th>Deskripsi</th>
                                         <th>Jumlah</th>
                                         <th>Tipe</th>
                                     </tr>
@@ -130,7 +130,7 @@
                                         <tr>
                                             <td style="font-size: 12px">
                                                 {{ $transaction->transaction_date->format('d/m/Y') }}</td>
-                                            <td style="font-size: 12px">{{ $transaction->paket->name }}</td>
+                                            <td style="font-size: 12px">{{ $transaction->description }}</td>
                                             <td style="font-size: 12px">Rp.
                                                 {{ number_format($transaction->amount, 0, ',', '.') }}</td>
                                             <td style="font-size: 12px">
