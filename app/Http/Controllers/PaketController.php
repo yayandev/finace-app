@@ -31,6 +31,15 @@ class PaketController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'nilai' => 'required|numeric',
+            'konsultan' => 'nullable|string',
+            'kontruksi' => 'nullable|string',
+            'pengadaan' => 'nullable|string',
+            'uraian' => 'nullable|string',
+            'periode' => 'nullable|string',
+            'no_kontrak' => 'nullable|string',
+            'tanggal_kontrak' => 'nullable|string',
+            'no_bastp' => 'nullable|string',
+            'penerima' => 'nullable|string',
         ]);
 
         Paket::create($request->all());
@@ -57,11 +66,22 @@ class PaketController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'nilai' => 'required|numeric',
+            'konsultan' => 'nullable|string',
+            'kontruksi' => 'nullable|string',
+            'pengadaan' => 'nullable|string',
+            'uraian' => 'nullable|string',
+            'periode' => 'nullable|string',
+            'no_kontrak' => 'nullable|string',
+            'tanggal_kontrak' => 'nullable|string',
+            'no_bastp' => 'nullable|string',
+            'penerima' => 'nullable|string',
         ]);
 
         $paket = Paket::findOrFail($id);
-        $paket->update($request->all());
-        return redirect()->route('pakets.index')->with('success', 'Paket berhasil diperbarui.');
+
+        if($paket->update($request->all())) {
+            return redirect()->route('pakets.index')->with('success', 'Paket berhasil diperbarui.');
+        }
     }
 
     // Menghapus paket

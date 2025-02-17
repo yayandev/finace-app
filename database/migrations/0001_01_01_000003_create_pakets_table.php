@@ -15,6 +15,15 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->decimal('nilai', 15, 2);
+            $table->string('konsultan')->nullable();
+            $table->string('kontruksi')->nullable();
+            $table->string('pengadaan')->nullable();
+            $table->string('uraian')->nullable();
+            $table->string('periode')->nullable();
+            $table->string('no_kontrak')->nullable();
+            $table->string('tanggal_kontrak')->nullable();
+            $table->string('no_bastp')->nullable();
+            $table->string('penerima')->nullable();
             $table->timestamps();
         });
     }

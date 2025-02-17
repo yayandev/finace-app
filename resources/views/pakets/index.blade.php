@@ -17,9 +17,9 @@
                     <i class="mdi mdi-download"></i> Export Excel
                 </a>
                 {{-- button modal add --}}
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-add">
+                <a href="/master/pakets/create" class="btn btn-primary">
                     <i class="mdi mdi-plus"></i> Tambah Paket
-                </button>
+                </a>
             </div>
         </div>
 
@@ -38,70 +38,6 @@
             </div>
         </div>
     </div>
-
-    {{-- modal add --}}
-    <div class="modal fade" id="modal-add" tabindex="-1" role="dialog" aria-labelledby="modal-add" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <form action="{{ route('pakets.store') }}" method="POST">
-                    @csrf
-                    <div class="modal-header">
-                        <h5 class="modal-title">Tambah Paket Pekerja</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Nama Paket</label>
-                            <input type="text" class="form-control" id="name" name="name" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="nilai_formatted" class="form-label">Nilai</label>
-                            <input type="text" class="form-control" id="nilai_formatted" oninput="formatRupiah(this)"
-                                required>
-                            <input type="hidden" id="nilai" name="nilai">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Tutup</button>
-                        <button type="submit" class="btn btn-primary">Simpan</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    {{-- modal edit --}}
-    <div class="modal fade" id="modal-edit" tabindex="-1" role="dialog" aria-labelledby="modal-edit" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <form action="" id="form-edit" method="POST">
-                    @csrf
-                    @method('PUT')
-                    <div class="modal-header">
-                        <h5 class="modal-title">Edit Paket Pekerja</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="edit-name" class="form-label">Nama Paket</label>
-                            <input type="text" class="form-control" id="edit-name" name="name" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="edit-nilai-formatted" class="form-label">Nilai</label>
-                            <input type="text" class="form-control" id="edit-nilai-formatted"
-                                oninput="formatRupiah(this)" required>
-                            <input type="hidden" id="edit-nilai" name="nilai">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Tutup</button>
-                        <button type="submit" class="btn btn-primary">Simpan</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
 @endsection
 
 @push('scripts')
@@ -157,9 +93,9 @@
                         searchable: false,
                         render: function(data, type, row) {
                             return `
-                                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modal-edit" data-id="${data}" data-name="${row.name}" data-nilai="${row.nilai}">
+                                <a href="/master/pakets/${data}/edit" class="btn btn-sm btn-warning" >
                                     <i class="mdi mdi-pencil"></i>
-                                </button>
+                                </a>
                                 <form action="/master/pakets/${data}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')
@@ -171,24 +107,6 @@
                         }
                     }
                 ]
-            });
-
-            // Modal Edit
-            $('#modal-edit').on('show.bs.modal', function(event) {
-                const button = $(event.relatedTarget);
-                const id = button.data('id');
-                const name = button.data('name');
-                const nilai = button.data('nilai');
-
-                const modal = $(this);
-                modal.find('.modal-body #edit-name').val(name);
-                modal.find('.modal-body #edit-nilai-formatted').val(new Intl.NumberFormat('id-ID', {
-                    style: 'currency',
-                    currency: 'IDR',
-                    maximumFractionDigits: 0
-                }).format(nilai));
-                modal.find('.modal-body #edit-nilai').val(nilai);
-                modal.find('#form-edit').attr('action', '/master/pakets/' + id);
             });
         });
     </script>
